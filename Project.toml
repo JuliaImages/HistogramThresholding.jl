@@ -1,0 +1,10 @@
+name = "HistogramThresholding"
+uuid = "8e3ecc80-03f2-11e9-1267-a1d11a9abb87"
+authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>"]
+version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
