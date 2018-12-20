@@ -1,5 +1,6 @@
 module HistogramThresholding
 
+<<<<<<< Updated upstream
 using Images
 using LinearAlgebra
 
@@ -20,4 +21,6 @@ export
 	# main functions
     find_threshold,
 	Otsu
+=======
+>>>>>>> Stashed changes
 end # module
