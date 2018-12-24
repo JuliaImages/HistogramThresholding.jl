@@ -18,7 +18,7 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
         end
 
         for i in eachindex(smoothHist)
-            if (i > 1) && (i < length(histogramLocal))
+            if (i > 1) && (i < length(smoothHist))
                 if (smoothHist[i] > smoothHist[i-1]) && (smoothHist[i] > smoothHist[i+1])
                 numMax+=1
                 end

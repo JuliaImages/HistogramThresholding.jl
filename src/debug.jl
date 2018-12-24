@@ -1,11 +1,11 @@
-using Images, TestImages, HistogramThresholding
+using Images, TestImages
 
-img = testimage("mandrill")
+img = testimage("lighthouse")
 img_g = Gray.(img)
 
 edges, counts = build_histogram(img_g,256,0,1)
 histogram = counts[1:end]
-t = find_threshold(MinThreshold, histogram, edges)
+t = find_threshold(MinThreshold(), histogram, edges)
 
 img_binary = map(img_g) do val
     if val < t
