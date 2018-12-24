@@ -1,4 +1,4 @@
-function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges::AbstractRange)
+function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::AbstractRange)
     #initilize number of maximums to be all values and create local copy of histogram
     numMax=length(histogram)
     histogramLocal=copy(histogram)
@@ -48,26 +48,9 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
         end
     end
 
-    #swap maxima to be in correct order (needs replacing with built in)
-    if maxt[1]>maxt[2]
-        temp=maxt[2]
-        temp2=maxt
-        maxt[2]=maxt[1]
-        maxt[1]=temp
-        max[2]=max[1]
-        max[1]=temp
-    end
+    t = (maxt[1]+maxt[2])/2
 
-    #find local minima betwen maxima
-    for i = maxt[1]:maxt[2]
-        if histogramLocal[i]<min
-            min = histogramLocal[i]
-            t = i
-        end
-    end
-
-    #correct to for lost values and scale to histogram
-    t = t+n
+     t = t+n
     t = t*edges[2]
     return t
 end
