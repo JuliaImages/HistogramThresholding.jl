@@ -1,10 +1,11 @@
 using Images, TestImages
 
-img = testimage("lighthouse")
+img = testimage("fabio_gray_512")
 img_g = Gray.(img)
 
 edges, counts = build_histogram(img_g,256,0,1)
 histogram = counts[1:end]
+#t = find_threshold(Intermodes(), histogram, edges)
 t = find_threshold(MinThreshold(), histogram, edges)
 
 img_binary = map(img_g) do val
