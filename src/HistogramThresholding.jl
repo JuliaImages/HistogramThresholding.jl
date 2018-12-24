@@ -10,8 +10,10 @@ struct Bimodal <: HistogramDistribution end
 
 abstract type ThresholdAlgorithm end
 struct Otsu <: ThresholdAlgorithm end
+struct MinThreshold <: ThresholdAlgorithm end
 
 include("otsu.jl")
+include("minimum.jl")
 
 
 
@@ -19,5 +21,6 @@ include("otsu.jl")
 export
 	# main functions
     find_threshold,
-	Otsu
+	Otsu,
+	MinThreshold
 end # module
