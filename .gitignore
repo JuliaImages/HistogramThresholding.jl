@@ -2,13 +2,7 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-<<<<<<<<< Temporary merge branch 1
 
 src/debug\.jl
 =========
 docs/build/
->>>>>>>>> Temporary merge branch 2
-
-docs/build/
-
-src/debug\.jl

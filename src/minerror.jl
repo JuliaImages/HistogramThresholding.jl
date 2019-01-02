@@ -15,8 +15,6 @@ function find_threshold(algorithm::Minerror, histogram::AbstractArray, edges::Ab
     σ²₁ = calc_σ²₁(threshold, histogram, μ₁)/P₁
     σ²₂ = calc_σ²₂(threshold, histogram, μ₂, len)/P₂
 
-    # println("P₁: $P₁ P₂: $P₂ μ₁: $μ₁ μ₂: $μ₂ σ²₁: $σ²₁ σ²₂: $σ²₂ hist: $(histogram[threshold])")
-
     J = 1
 
     if (P₁ != 0 && σ²₁ != 0)
