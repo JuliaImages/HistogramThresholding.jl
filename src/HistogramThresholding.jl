@@ -9,7 +9,7 @@ struct Bimodal <: HistogramDistribution end
 
 abstract type ThresholdAlgorithm end
 struct Otsu <: ThresholdAlgorithm end
-struct Minerror <: ThresholdAlgorithm end
+struct MinError <: ThresholdAlgorithm end
 
 include("otsu.jl")
 include("minerror.jl")
@@ -18,5 +18,5 @@ export
 	# main functions
     find_threshold,
 	Otsu,
-	Minerror
+	MinError
 end # module
