@@ -1,7 +1,7 @@
 using Images, TestImages, HistogramThresholding
 
-img = testimage("fabio_gray_512")
-img2 = testimage("fabio_gray_512")
+img = testimage("cameraman")
+img2 = testimage("cameraman")
 img_g = Gray.(img2)
 img_g2 = Gray.(img)
 
