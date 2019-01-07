@@ -2,7 +2,4 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-
-src/debug\.jl
-=========
 docs/build/
