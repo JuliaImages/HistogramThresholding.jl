@@ -28,6 +28,14 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
     numMax=length(histogram)
     histogramLocal=copy(histogram)
     n = 0
+    numMax = 0
+    for i in eachindex(histogram)
+        if (i > 1) && (i < length(histogram))
+            if (histogram[i] > histogram[i-1]) && (histogram[i] > histogram[i+1])
+            numMax+=1
+            end
+        end
+    end
 
     #smooth histogram untill only two peaks remain
     while numMax > 2
@@ -92,7 +100,7 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
     end
 
     #correct to for lost values and scale to histogram
-    t = t + n
-    t = t * edges[2]
+    t = floor(Int, t) + n
+    t = edges[t]
     return t
 end
