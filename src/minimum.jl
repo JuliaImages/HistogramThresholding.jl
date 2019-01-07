@@ -1,10 +1,35 @@
+"""
+```
+t = find_threshold(MinThreshold(),  histogram, edges)
+```
+
+Under the assumption that the histogram is bimodal the histogram is smoothed using 3-mean smoothing untill modes remain. The threshold is then set such that it is the minumum value between these two modes.
+
+# Arguments
+
+The function arguments are described in more detail below.
+
+##  `histogram`
+
+An `AbstractArray` storing the frequency distribution.
+
+##  `edges`
+
+An `AbstractRange` specifying how the intervals for the frequency distribution
+are divided.
+
+## Reference
+
+TBA
+"""
+
 function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges::AbstractRange)
     #initilize number of maximums to be all values and create local copy of histogram
     numMax=length(histogram)
     histogramLocal=copy(histogram)
     n = 0
 
-    #smooth histogram untill only to peaks remain
+    #smooth histogram untill only two peaks remain
     while numMax > 2
         n += 1
         numMax=0
@@ -67,7 +92,7 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
     end
 
     #correct to for lost values and scale to histogram
-    t = t+n
-    t = t*edges[2]
+    t = t + n
+    t = t * edges[2]
     return t
 end
