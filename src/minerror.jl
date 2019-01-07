@@ -12,8 +12,8 @@ function find_threshold(algorithm::MinError, histogram::AbstractArray, edges::Ab
 
   P₁ = 0
   μ₁P₁ = 0
-  minJvalue = nothing
-  minJindex = nothing
+  minJvalue = typemax(Float64)
+  minJindex = 0
 
   for threshold = 1:len
 
@@ -35,7 +35,7 @@ function find_threshold(algorithm::MinError, histogram::AbstractArray, edges::Ab
       J += 2P₂ * log(sqrt(σ²₂)/P₂)
     end
 
-    if (minJvalue == nothing || J < minJvalue)
+    if (J < minJvalue)
       minJvalue = J
       minJindex = threshold
     end
