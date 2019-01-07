@@ -4,18 +4,19 @@ using HistogramThresholding
 
 function find_threshold(algorithm::MinError, histogram::AbstractArray, edges::AbstractRange)
 
-  len = length(edges)
+  startindex = first(axes(histogram, 1))
+  endindex = last(axes(histogram, 1))
   totalpx = sum(histogram)
 
-  μ₁P₁list = calc_μ₁P₁(histogram, len)
+  μ₁P₁list = calculate_μ₁P₁(histogram, startindex, endindex)
   μ₁P₁list_sum = sum(μ₁P₁list)
 
-  P₁ = 0
-  μ₁P₁ = 0
-  minJvalue = nothing
-  minJindex = nothing
+  P₁ = 0.0
+  μ₁P₁ = 0.0
+  minJvalue = typemax(Float64)
+  minJindex = startindex
 
-  for threshold = 1:len
+  for threshold = startindex:endindex
 
     P₁ += histogram[threshold]
     P₂ = totalpx - P₁
@@ -24,18 +25,18 @@ function find_threshold(algorithm::MinError, histogram::AbstractArray, edges::Ab
     μ₁ = μ₁P₁/P₁
     μ₂ = (μ₁P₁list_sum - μ₁P₁)/P₂
 
-    σ²₁ = calc_σ²₁P₁(threshold, μ₁, histogram)/P₁
-    σ²₂ = calc_σ²₂P₂(threshold, μ₂, histogram, len)/P₂
+    σ²₁ = calculate_σ²₁P₁(threshold, μ₁, histogram, startindex)/P₁
+    σ²₂ = calculate_σ²₂P₂(threshold, μ₂, histogram, endindex)/P₂
 
-    J = 1
-    if (P₁ != 0 && σ²₁ != 0)
+    J = 1.0
+    if (P₁ != 0.0 && σ²₁ != 0.0)
       J += 2P₁ * log(sqrt(σ²₁)/P₁)
     end
-    if (P₂ != 0 && σ²₂ != 0)
+    if (P₂ != 0.0 && σ²₂ != 0.0)
       J += 2P₂ * log(sqrt(σ²₂)/P₂)
     end
 
-    if (minJvalue == nothing || J < minJvalue)
+    if (J < minJvalue)
       minJvalue = J
       minJindex = threshold
     end
@@ -43,26 +44,27 @@ function find_threshold(algorithm::MinError, histogram::AbstractArray, edges::Ab
   minJindex
 end
 
-function calc_μ₁P₁(histogram, len)
-  μ₁P₁list = zeros(len)
-  for g = 1:len
-    μ₁P₁list[g] = histogram[g] * (g - 1)
+function calculate_μ₁P₁(histogram, startindex, endindex)
+  μ₁P₁list = zeros(Float64, startindex:endindex)
+
+  for g = startindex:endindex
+    μ₁P₁list[g] = histogram[g] * g
   end
   μ₁P₁list
 end
 
-function calc_σ²₁P₁(threshold, μ₁, histogram)
-  σ²₁P₁ = 0
-  for g = 1:threshold
-    σ²₁P₁ += ((g - 1) - μ₁)^2 * histogram[g]
+function calculate_σ²₁P₁(threshold, μ₁, histogram, startindex)
+  σ²₁P₁ = 0.0
+  for g = startindex:threshold
+    σ²₁P₁ += (g - μ₁)^2 * histogram[g]
   end
   σ²₁P₁
 end
 
-function calc_σ²₂P₂(threshold, μ₂, histogram, len)
-  σ²₂P₂ = 0
-  for g = (threshold + 1):len
-    σ²₂P₂ += ((g - 1) - μ₂)^2 * histogram[g]
+function calculate_σ²₂P₂(threshold, μ₂, histogram, endindex)
+  σ²₂P₂ = 0.0
+  for g = (threshold + 1):endindex
+    σ²₂P₂ += (g - μ₂)^2 * histogram[g]
   end
   σ²₂P₂
 end
