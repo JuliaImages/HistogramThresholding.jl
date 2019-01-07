@@ -3,3 +3,5 @@
 *.jl.*.cov
 *.jl.mem
 docs/build/
+
+src/debug\.jl
