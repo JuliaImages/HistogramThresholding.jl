@@ -72,7 +72,6 @@ function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::
     for i in eachindex(histogramLocal)
         if (i > 1) && (i < length(histogramLocal))
             if (histogramLocal[i] > histogramLocal[i-1]) && (histogramLocal[i] > histogramLocal[i+1])
-                @show i
                 if maxt[1] == -1
                     maxt[1] = i
                     #max[1] = histogramLocal[i]
