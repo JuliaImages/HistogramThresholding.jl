@@ -28,11 +28,19 @@ function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::
     numMax=length(histogram)
     histogramLocal=copy(histogram)
     n = 0
+    numMax = 0
+    for i in eachindex(histogram)
+        if (i > 1) && (i < length(histogram))
+            if (histogram[i] > histogram[i-1]) && (histogram[i] > histogram[i+1])
+            numMax+=1
+            end
+        end
+    end
 
     #smooth histogram untill only two peaks remain
     while numMax > 2
         n += 1
-        numMax=0
+        numMax = 0
         smoothHist = []
         for i in eachindex(histogramLocal)
             if (i > 1) && (i < length(histogramLocal))
@@ -52,6 +60,8 @@ function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::
         histogramLocal = copy(smoothHist)
     end
 
+    @show length(histogram)
+
     #setup initial max, min and threshold value (t)
     min = typemax(Int)
     max = [0.0,0.0]
@@ -62,12 +72,13 @@ function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::
     for i in eachindex(histogramLocal)
         if (i > 1) && (i < length(histogramLocal))
             if (histogramLocal[i] > histogramLocal[i-1]) && (histogramLocal[i] > histogramLocal[i+1])
+                @show i
                 if maxt[1] == -1
                     maxt[1] = i
-                    max[1] = histogramLocal[i]
+                    #max[1] = histogramLocal[i]
                 elseif maxt[2] == -1
                     maxt[2] = i
-                    max[2] = histogramLocal[i]
+                    #max[i] = histogramLocal[i]
                 end
             end
         end
@@ -75,7 +86,7 @@ function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::
 
     #calculate final threshold value and correct for lost bins
     t = (maxt[1] + maxt[2]) / 2
-    t = t + n
-    t = t * edges[2]
+    t = floor(Int, t) #+ n
+    t = edges[t]
     return t
 end
