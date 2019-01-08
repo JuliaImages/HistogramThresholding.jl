@@ -20,14 +20,13 @@ are divided.
 
 ## Reference
 
-TBA
+Glasbey, C. (1993). An Analysis of Histogram-Based Thresholding Algorithms. CVGIP: Graphical Models and Image Processing, [online] 55(6), pp.532-537. Available at: http://www.sciencedirect.com/science/article/pii/S1049965283710400.
 """
 
 function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges::AbstractRange)
     #initilize number of maximums to be all values and create local copy of histogram
     numMax=length(histogram)
     histogramLocal=copy(histogram)
-    n = 0
     numMax = 0
     for i in eachindex(histogram)
         if (i > 1) && (i < length(histogram))
@@ -39,12 +38,19 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
 
     #smooth histogram untill only two peaks remain
     while numMax > 2
-        n += 1
         numMax=0
         smoothHist = []
         for i in eachindex(histogramLocal)
             if (i > 1) && (i < length(histogramLocal))
                 m=histogramLocal[i-1]+histogramLocal[i]+histogramLocal[i+1]
+                m=m/3
+                push!(smoothHist,m)
+            elseif i == 1
+                m=histogramLocal[i]+histogramLocal[i]+histogramLocal[i+1]
+                m=m/3
+                push!(smoothHist,m)
+            elseif i == length(histogramLocal)
+                m=histogramLocal[i-1]+histogramLocal[i]+histogramLocal[i]
                 m=m/3
                 push!(smoothHist,m)
             end
@@ -76,9 +82,20 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
                 elseif maxt[2] == -1
                     maxt[2] = i
                     max[2] = histogramLocal[i]
+                else
+                    return 0
                 end
             end
         end
+    end
+
+    #check for binomial
+    if maxt[1] == -1
+         return 0
+    end
+
+    if maxt[2] == -1
+        return 0
     end
 
     #swap maxima to be in correct order (needs replacing with built in)
@@ -99,8 +116,8 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
         end
     end
 
-    #correct to for lost values and scale to histogram
-    t = floor(Int, t) + n
+    #scale to histogram
+    t = round(Int, t)
     t = edges[t]
     return t
 end

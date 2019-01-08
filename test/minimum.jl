@@ -11,7 +11,7 @@
     img = testimage("cameraman")
     edges, counts = build_histogram(img,  256)
     t = find_threshold(MinThreshold(), counts[1:end], edges)
-    @test t == 0.5234375
+    @test t == 0.296875
 
 
 end
