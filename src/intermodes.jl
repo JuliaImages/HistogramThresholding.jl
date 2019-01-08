@@ -25,45 +25,49 @@ Glasbey, C. (1993). An Analysis of Histogram-Based Thresholding Algorithms. CVGI
 
 function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::AbstractRange)
     #initilize number of maximums to be all values and create local copy of histogram
-    numMax=length(histogram)
-    histogramLocal=copy(histogram)
-    numMax = 0
+    num_max=length(histogram)
+    histogram_local=copy(histogram)
+    histogram_local=Array{Float64}(histogram_local)
+    num_max = 0
+
+    #check initial local maxima
     for i in eachindex(histogram)
         if (i > 1) && (i < length(histogram))
             if (histogram[i] > histogram[i-1]) && (histogram[i] > histogram[i+1])
-            numMax+=1
+            num_max+=1
             end
         end
     end
 
     #smooth histogram untill only two peaks remain
-    while numMax > 2
-        numMax = 0
-        smoothHist = []
-        for i in eachindex(histogramLocal)
-            if (i > 1) && (i < length(histogramLocal))
-                m=histogramLocal[i-1]+histogramLocal[i]+histogramLocal[i+1]
+    while num_max > 2
+        num_max = 0
+        smooth_histsogram = similar(histogram_local)
+        for i in eachindex(histogram_local)
+            if (i > 1) && (i < length(histogram_local))
+                m=histogram_local[i-1]+histogram_local[i]+histogram_local[i+1]
                 m=m/3
-                push!(smoothHist,m)
+                smooth_histsogram[i]=m
             elseif i == 1
-                m=histogramLocal[i]+histogramLocal[i]+histogramLocal[i+1]
+                m=histogram_local[i]+histogram_local[i]+histogram_local[i+1]
                 m=m/3
-                push!(smoothHist,m)
-            elseif i == length(histogramLocal)
-                m=histogramLocal[i-1]+histogramLocal[i]+histogramLocal[i]
+                smooth_histsogram[i]=m
+            elseif i == length(histogram_local)
+                m=histogram_local[i-1]+histogram_local[i]+histogram_local[i]
                 m=m/3
-                push!(smoothHist,m)
+                smooth_histsogram[i]=m
             end
         end
 
-        for i in eachindex(smoothHist)
-            if (i > 1) && (i < length(smoothHist))
-                if (smoothHist[i] > smoothHist[i-1]) && (smoothHist[i] > smoothHist[i+1])
-                numMax+=1
+        #check number of local maxima
+        for i in eachindex(smooth_histsogram)
+            if (i > 1) && (i < length(smooth_histsogram))
+                if (smooth_histsogram[i] > smooth_histsogram[i-1]) && (smooth_histsogram[i] > smooth_histsogram[i+1])
+                num_max+=1
                 end
             end
         end
-        histogramLocal = copy(smoothHist)
+        histogram_local = copy(smooth_histsogram)
     end
 
     #setup initial max, min and threshold value (t)
@@ -73,9 +77,9 @@ function find_threshold(algorithm::Intermodes, histogram::AbstractArray, edges::
     t = -1
 
     #find local maxima
-    for i in eachindex(histogramLocal)
-        if (i > 1) && (i < length(histogramLocal))
-            if (histogramLocal[i] > histogramLocal[i-1]) && (histogramLocal[i] > histogramLocal[i+1])
+    for i in eachindex(histogram_local)
+        if (i > 1) && (i < length(histogram_local))
+            if (histogram_local[i] > histogram_local[i-1]) && (histogram_local[i] > histogram_local[i+1])
                 if maxt[1] == -1
                     maxt[1] = i
                 elseif maxt[2] == -1
