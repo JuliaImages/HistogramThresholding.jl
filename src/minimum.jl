@@ -25,37 +25,37 @@ Glasbey, C. (1993). An Analysis of Histogram-Based Thresholding Algorithms. CVGI
 
 function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges::AbstractRange)
     #initilize number of maximums to be all values and create local copy of histogram
-    num_max=length(histogram)
-    histogram_local=copy(histogram)
-    histogram_local=Array{Float64}(histogram_local)
+    num_max = length(histogram)
+    histogram_local = copy(histogram)
+    histogram_local = Array{Float64}(histogram_local)
     num_max = 0
 
     #check initial local maxima
     for i in eachindex(histogram)
         if (i > 1) && (i < length(histogram))
             if (histogram[i] > histogram[i-1]) && (histogram[i] > histogram[i+1])
-            num_max+=1
+            num_max += 1
             end
         end
     end
 
     #smooth histogram untill only two peaks remain
     while num_max > 2
-        num_max=0
+        num_max = 0
         smooth_histogram = similar(histogram_local)
         for i in eachindex(histogram_local)
             if (i > 1) && (i < length(histogram_local))
-                m=histogram_local[i-1]+histogram_local[i]+histogram_local[i+1]
-                m=m/3
-                smooth_histogram[i]=m
+                m = histogram_local[i-1] + histogram_local[i] + histogram_local[i+1]
+                m = m/3
+                smooth_histogram[i] = m
             elseif i == 1
-                m=histogram_local[i]+histogram_local[i]+histogram_local[i+1]
-                m=m/3
-                smooth_histogram[i]=m
+                m = histogram_local[i] + histogram_local[i] + histogram_local[i+1]
+                m = m/3
+                smooth_histogram[i] = m
             elseif i == length(histogram_local)
-                m=histogram_local[i-1]+histogram_local[i]+histogram_local[i]
-                m=m/3
-                smooth_histogram[i]=m
+                m = histogram_local[i-1] + histogram_local[i] + histogram_local[i]
+                m = m/3
+                smooth_histogram[i] = m
             end
         end
 
@@ -63,7 +63,7 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
         for i in eachindex(smooth_histogram)
             if (i > 1) && (i < length(smooth_histogram))
                 if (smooth_histogram[i] > smooth_histogram[i-1]) && (smooth_histogram[i] > smooth_histogram[i+1])
-                num_max+=1
+                num_max += 1
                 end
             end
         end
@@ -103,13 +103,13 @@ function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges
     end
 
     #swap maxima to be in correct order (needs replacing with built in)
-    if maxt[1]>maxt[2]
-        temp=maxt[2]
-        temp2=maxt
-        maxt[2]=maxt[1]
-        maxt[1]=temp
-        max[2]=max[1]
-        max[1]=temp
+    if maxt[1] > maxt[2]
+        temp = maxt[2]
+        temp2 = maxt
+        maxt[2] = maxt[1]
+        maxt[1] = temp
+        max[2] = max[1]
+        max[1] = temp
     end
 
     #find local minima betwen maxima
