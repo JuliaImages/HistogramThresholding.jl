@@ -2,6 +2,7 @@ module HistogramThresholding
 
 using Images
 using LinearAlgebra
+using OffsetArrays
 
 abstract type HistogramDistribution end
 struct Unimodal <: HistogramDistribution end
