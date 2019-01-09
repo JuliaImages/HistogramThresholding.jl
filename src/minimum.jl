@@ -22,44 +22,20 @@ are divided.
 
 C. A. Glasbey, “An Analysis of Histogram-Based Thresholding Algorithms,” CVGIP: Graphical Models and Image Processing, vol. 55, no. 6, pp. 532–537, Nov. 1993. doi:10.1006/cgip.1993.1040
 """
-
 function find_threshold(algorithm::MinThreshold, histogram::AbstractArray, edges::AbstractRange)
-    #smooth histogram
-    histogram_local = smooth_histogram(histogram)
-
-    #find local maxima
-    maxt = find_modes(histogram_local)
-
-    #check for binomial
-    if maxt[1] == -1
-         return 0
-    end
-
-    if maxt[2] == -1
+    histogram_local = smooth_histogram(histogram, 1000)
+    indices = find_maxima_indices(histogram_local)
+    if length(indices)!=2
         return 0
     end
-
-    #swap maxima to be in correct order
-    if maxt[1] > maxt[2]
-        temp = maxt[2]
-        temp2 = maxt
-        maxt[2] = maxt[1]
-        maxt[1] = temp
-        max[2] = max[1]
-        max[1] = temp
-    end
-
-    #find local minima betwen maxima
-    min=typemax(Float64)
-    for i = maxt[1]:maxt[2]
-        if histogram_local[i]<min
-            min = histogram_local[i]
+    t=0
+    min_value=typemax(Float64)
+    for i = min(indices[1],indices[2]):max(indices[1],indices[2])
+        if histogram_local[i]<min_value
+            min_value = histogram_local[i]
             t = i
         end
     end
-
-    #scale to histogram
-    t_pos = round(Int, t)
-    t = edges[t_pos]
-    return t
+    index = round(Int, t)
+    return edges[index]
 end
