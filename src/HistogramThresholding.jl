@@ -13,6 +13,7 @@ struct Otsu <: ThresholdAlgorithm end
 struct MinThreshold <: ThresholdAlgorithm end
 struct Intermodes <: ThresholdAlgorithm end
 
+include("common.jl")
 include("otsu.jl")
 include("minimum.jl")
 include("intermodes.jl")
