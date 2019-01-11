@@ -1,55 +1,74 @@
 """
 ```
-t = find_threshold(Unimodal(),  histogram, edges)
+t = find_threshold(Unimodal(), histogram, edges)
 ```
 
-This method generates a threshold using Rosin's algorithm for unimodal images.
-It assumes that:
+Generates a threshold value for array `histogram` and interval `edges`
+using Rosin's algorithm.
 
-*  The histogram is unimodal
-*  There is always at least one bin that has a frequency of 0, to be used as
-the minimum. If not, the algorithm will use the last bin.
-*  If there are multiple zero bins, the algorithm will use the first zero bin.
 
-# Arguments
+# Output
+Returns `t`, a real number that specifies the image's threshold using `edges`,
+an interval that specifies how the histogram is divided into bins, and `histogram`,
+an array that contains the frequencies of each bin.
 
-The function arguments are described in more detail below.
 
-##  `histogram`
+# Details
+This algorithm first selects the bin in the histogram with the highest frequency.
+The algorithm then searches from the location of the maximum bin to the last bin
+of the histogram for the first bin with a frequency of 0 (known as the minimum bin.).
+A line is then drawn that passes through both the maximum and minimum bins. The
+bin with the greatest orthogonal distance to the line is chosen as the threshold
+value.
 
-An `AbstractArray` storing the frequency distribution.
 
-##  `edges`
+## Assumptions
+This algorithm assumes that:
 
-An `AbstractRange` specifying how the intervals for the frequency distribution
-are divided.
+* The histogram is unimodal
+* There is always at least one bin that has a frequency of 0. If not, the
+algorithm will use the last bin as the minimum bin.
+* If the histogram includes multiple bins with a frequency of 0, the algorithm
+will select the first zero bin as its minimum.
+* If there are multiple bins with the greatest orthogonal distance, the leftmost
+bin is selected as the threshold.
 
-## Reference
 
-Rosin, P. (2001). Unimodal thresholding. Pattern Recognition, [online] 34(11), pp.2083-2096. Available at: https://users.cs.cf.ac.uk/Paul.Rosin/resources/papers/unimodal2.pdf.
+# Example
 
+Compute the threshold for the "moonsurface" image in the TestImages package.
+```julia
+
+using TestImages, HistogramThresholding
+
+img = testimage("moonsurface")
+edges, counts = build_histogram(img,256)
+t = find_threshold(UniThreshold(),counts, edges)
+```
+
+
+# Reference
+[1] P. L. Rosin, “Unimodal thresholding,” Pattern Recognition, vol. 34, no. 11, pp. 2083–2096, Nov. 2001.
+
+
+# See Also
 """
+function find_threshold(algorithm::UniThreshold, histogram::AbstractArray, edges::AbstractRange)
+    #= Calculates the orthogonal distance between the line (slope m,
+    y-intercept c), and the point (co-ordinates x₀, y₀).
+    =#
+    function calculate_distance(m::Real, c::Real, x₀::Real, y₀::Real)
+        abs(m*x₀ + -1*y₀ + c) / sqrt((m)^2 + 1)
+    end
 
+    # Finds the index & value of bin with highest value.
+    max_val, max_index = findmax(histogram)
 
-#= Calculates the distance between the line calculated with slope m,
-y-intercept c, and a point wit \h co-ordinates x₀, y₀
-=#
-function calc_dist(m::Real, c::Real, x₀::Real, y₀::Real)
-    return abs(m*x₀ + -1*y₀ + c) / sqrt((m)^2 + (-1)^2)
-end
-
-
-function find_threshold(algorithm::UniThreshold,  histogram::AbstractArray, edges::AbstractRange)
-
-    # Find the index & value of bin with highest value
-    max_val = findmax(histogram)[1]
-    max_index = findmax(histogram)[2]
-
-    # initialise min bin index
+    # Initialise minimum bin index.
     min_index = 1
     found_min = false
 
-    #Find the first zero bin. If no zero bin is found, use the last bin
+    # Find the first zero bin.
     for j in max_index:last(first(axes(histogram)))
         if histogram[j] == 0.0
             min_index = j
@@ -58,24 +77,27 @@ function find_threshold(algorithm::UniThreshold,  histogram::AbstractArray, edge
         end
     end
 
+    # If no zero bin is found, use the last bin.
     if found_min == false
         min_index = last(first(axes(histogram)))
     end
 
-    # Find slope and c value of the line
-    m = (max_val-0) / (max_index - min_index)
+    # Find slope and y-intercept of the line.
+    m = max_val / (max_index - min_index)
     c = -m*min_index
 
-
-    # Find the greatest distance
+    # Initialise the maximum bin as having the inital greatest distance.
     t = max_index
+    max_distance = calculate_distance(m, c, t, histogram[t])
+
+    # Find bin with the greatest distance.
     for k in max_index:min_index
-        if calc_dist(m, c, k, histogram[k]) > calc_dist(m, c, t, histogram[t])
+        if calculate_distance(m, c, k, histogram[k]) > max_distance
+            max_distance = calculate_distance(m, c, k, histogram[k])
             t = k
         end
     end
 
-    # Return the greatest distance
+    # Return the greatest distance.
     return edges[t]
-
 end

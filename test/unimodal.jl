@@ -1,6 +1,4 @@
-
 @testset "unimodal" begin
-
     #= Tests a histogram in which the bin directly following the maximum has an
     intensity of 1,therefore making the distance from the second bin to
     the line always the longest
@@ -34,6 +32,4 @@
     samples[2] = 1
     t = find_threshold(UniThreshold(),samples,edges)
     @test t == 1
-
-
 end
