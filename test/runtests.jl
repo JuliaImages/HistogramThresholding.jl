@@ -11,6 +11,8 @@ end
 
 @testset "HistogramThresholding.jl" begin
     include("otsu.jl")
+    include("minimum.jl")
+    include("intermodes.jl")
     include("unimodal.jl")
     include("moments.jl")
 end
