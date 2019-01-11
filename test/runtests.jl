@@ -7,4 +7,5 @@ end
 
 @testset "HistogramThresholding.jl" begin
     include("otsu.jl")
+    include("moments.jl")
 end
