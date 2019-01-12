@@ -7,7 +7,8 @@
     @test t == 128
 
     # Call function and determine threshold on cameraman image for which we know
-    # what the correct threshold should be (based on implementation in other projects).
+    # what the correct threshold should be (based on an implementation in
+    # another project).
     img = testimage("cameraman")
     edges, counts = build_histogram(img,  256)
     t = find_threshold(Intermodes(), counts[1:end], edges)

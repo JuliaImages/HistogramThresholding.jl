@@ -6,13 +6,13 @@
     edges = 0:255
     samples = collect(255:-1:0)
     samples[2] = 1
-    t = find_threshold(UniThreshold(),samples,edges)
+    t = find_threshold(UnimodalRosin(),samples,edges)
     @test t == 1
 
     # Tests using a unimodal test image from the TestImages package
     img = testimage("moonsurface")
     edges, samples = build_histogram(img,256)
-    t = find_threshold(UniThreshold(),samples, edges)
+    t = find_threshold(UnimodalRosin(),samples, edges)
     @test t == 0.5530790786724538
 
     #= Tests a histogram that resembles a unimodal image, using a
@@ -22,14 +22,12 @@
     =#
     edges = 0:255
     samples = map(x->surge(x, A = 20 ,k=0.04),edges)
-    t = find_threshold(UniThreshold(),samples,edges)
+    t = find_threshold(UnimodalRosin(),samples,edges)
     @test t == 112
 
-    #= Testing a histogram in which the number of bins is greater than 256
-    =#
     edges = 0:200
     samples = collect(200:-1:0)
     samples[2] = 1
-    t = find_threshold(UniThreshold(),samples,edges)
+    t = find_threshold(UnimodalRosin(),samples,edges)
     @test t == 1
 end

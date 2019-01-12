@@ -6,6 +6,10 @@ t = find_threshold(Otsu(),  histogram, edges)
 Under the assumption that the histogram is bimodal the threshold is
 set so that the resultant inter-class variance is maximal.
 
+# Output
+
+Returns a real number `t` that specifies the threshold.
+
 # Arguments
 
 The function arguments are described in more detail below.
@@ -19,9 +23,27 @@ An `AbstractArray` storing the frequency distribution.
 An `AbstractRange` specifying how the intervals for the frequency distribution
 are divided.
 
-## Reference
+# Example
 
-Nobuyuki Otsu (1979). "A threshold selection method from gray-level histograms". *IEEE Trans. Sys., Man., Cyber.* 9 (1): 62–66. [doi:10.1109/TSMC.1979.4310076](http://dx.doi.org/doi:10.1109/TSMC.1979.4310076)
+Compute the threshold for the "camerman" image in the `TestImages` package.
+
+```julia
+using TestImages, ImageContrastAdjustment, HistogramThresholding
+
+img = testimage("cameraman")
+edges, counts = build_histogram(img,256)
+#=
+  The `counts` array stores at index 0 the frequencies that were below the
+  first bin edge. Since we are seeking a threshold over the interval
+  partitioned by `edges` we need to discard the first bin in `counts`
+  so that the dimensions of `edges` and `counts` match.
+=#
+t = find_threshold(Otsu(),counts[1:end], edges)
+```
+
+# Reference
+
+1. Nobuyuki Otsu (1979). "A threshold selection method from gray-level histograms". *IEEE Trans. Sys., Man., Cyber.* 9 (1): 62–66. [doi:10.1109/TSMC.1979.4310076](http://dx.doi.org/doi:10.1109/TSMC.1979.4310076)
 """
 function find_threshold(algorithm::Otsu,  histogram::AbstractArray, edges::AbstractRange)
   N = sum(histogram)

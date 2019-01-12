@@ -1,67 +1,77 @@
 """
 ```
-t = find_threshold(Unimodal(), histogram, edges)
+t = find_threshold(UnimodalRosin(), histogram, edges)
 ```
 
 Generates a threshold value for array `histogram` and interval `edges`
 using Rosin's algorithm.
 
-
 # Output
-Returns `t`, a real number that specifies the image's threshold using `edges`,
-an interval that specifies how the histogram is divided into bins, and `histogram`,
-an array that contains the frequencies of each bin.
-
+Returns `t`, a real number that specifies the threshold.
 
 # Details
-This algorithm first selects the bin in the histogram with the highest frequency.
-The algorithm then searches from the location of the maximum bin to the last bin
-of the histogram for the first bin with a frequency of 0 (known as the minimum bin.).
-A line is then drawn that passes through both the maximum and minimum bins. The
-bin with the greatest orthogonal distance to the line is chosen as the threshold
-value.
+This algorithm first selects the bin in the histogram with the highest
+frequency. The algorithm then searches from the location of the maximum bin to
+the last bin of the histogram for the first bin with a frequency of 0 (known as
+the minimum bin.). A line is then drawn that passes through both the maximum and
+minimum bins. The bin with the greatest orthogonal distance to the line is
+chosen as the threshold value.
 
 
 ## Assumptions
 This algorithm assumes that:
 
-* The histogram is unimodal
-* There is always at least one bin that has a frequency of 0. If not, the
-algorithm will use the last bin as the minimum bin.
-* If the histogram includes multiple bins with a frequency of 0, the algorithm
-will select the first zero bin as its minimum.
-* If there are multiple bins with the greatest orthogonal distance, the leftmost
-bin is selected as the threshold.
+* The histogram is unimodal.
+* There is always at least one bin that has a frequency of 0. If not, the algorithm will use the last bin as the minimum bin.
+* If the histogram includes multiple bins with a frequency of 0, the algorithm will select the first zero bin as its minimum.
+* If there are multiple bins with the greatest orthogonal distance, the leftmost bin is selected as the threshold.
 
+# Arguments
+
+The function arguments are described in more detail below.
+
+##  `histogram`
+
+An `AbstractArray` storing the frequency distribution.
+
+##  `edges`
+
+An `AbstractRange` specifying how the intervals for the frequency distribution
+are divided.
 
 # Example
 
-Compute the threshold for the "moonsurface" image in the TestImages package.
+Compute the threshold for the "moonsurface" image in the `TestImages` package.
 ```julia
-
-using TestImages, HistogramThresholding
+using TestImages, ImageContrastAdjustment, HistogramThresholding
 
 img = testimage("moonsurface")
 edges, counts = build_histogram(img,256)
-t = find_threshold(UniThreshold(),counts, edges)
+#=
+  The `counts` array stores at index 0 the frequencies that were below the
+  first bin edge. Since we are seeking a threshold over the interval
+  partitioned by `edges` we need to discard the first bin in `counts`
+  so that the dimensions of `edges` and `counts` match.
+=#
+t = find_threshold(UnimodalRosin(),counts[1:end], edges)
 ```
 
 
 # Reference
-[1] P. L. Rosin, “Unimodal thresholding,” Pattern Recognition, vol. 34, no. 11, pp. 2083–2096, Nov. 2001.
+1. P. L. Rosin, “Unimodal thresholding,” Pattern Recognition, vol. 34, no. 11, pp. 2083–2096, Nov. 2001.[doi:10.1016/s0031-3203(00)00136-9](https://doi.org/10.1016/s0031-3203%2800%2900136-9)
 
 
 # See Also
 """
-function find_threshold(algorithm::UniThreshold, histogram::AbstractArray, edges::AbstractRange)
+function find_threshold(algorithm::UnimodalRosin, histogram::AbstractArray, edges::AbstractRange)
     #= Calculates the orthogonal distance between the line (slope m,
-    y-intercept c), and the point (co-ordinates x₀, y₀).
+    y-intercept c), and the point (coordinates x₀, y₀).
     =#
     function calculate_distance(m::Real, c::Real, x₀::Real, y₀::Real)
         abs(m*x₀ + -1*y₀ + c) / sqrt((m)^2 + 1)
     end
 
-    # Finds the index & value of bin with highest value.
+    # Finds the index & value of the bin with highest value.
     max_val, max_index = findmax(histogram)
 
     # Initialise minimum bin index.
@@ -98,6 +108,6 @@ function find_threshold(algorithm::UniThreshold, histogram::AbstractArray, edges
         end
     end
 
-    # Return the greatest distance.
+    # Return the threshold corresponding to the greatest distance.
     return edges[t]
 end
