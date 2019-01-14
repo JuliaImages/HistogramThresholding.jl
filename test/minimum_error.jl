@@ -2,15 +2,15 @@
 
     samples = map(x->gaussian_mixture(x, P₁ = 0.5, μ₁ = 64, σ₁ = 15, P₂ = 0.5, μ₂ = 192, σ₂ = 15), 0:255)
     edges = 0:255
-    t = find_threshold(MinimumError(), round.(Int,samples * 10^10), edges)
+    t = find_threshold(MinimumError(), round.(Int,samples * 10^8), edges)
     @test t == 128
     t = find_threshold(MinimumError(), samples, edges)
     @test t == 128
 
     # Replicates the result of Figure 2 in the original paper of Kittler and Illingworth.
     samples = map(x->gaussian_mixture(x, P₁ = 0.5, μ₁ = 50, σ₁ = 4, P₂ = 0.5, μ₂ = 150, σ₂ = 30), 0:255)
-    edges = 0:255
-    t = find_threshold(MinimumError(), ceil.(Int,samples * 10^10), edges)
+    edges = 0.0:255.0
+    t = find_threshold(MinimumError(), ceil.(Int,samples * 10^8), edges)
     @test t == 64
     t = find_threshold(MinimumError(), samples, edges)
     @test t == 64
