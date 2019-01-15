@@ -51,23 +51,23 @@ function find_threshold(algorithm::Otsu,  histogram::AbstractArray, edges::Abstr
   histogram_indices = first(axes(pdf))
   first_bin = first(histogram_indices)
   last_bin = last(histogram_indices)
-  zeroth_cummulative_moment = cumsum(pdf)
-  first_cummulative_moment = cumsum((first_bin:last_bin) .* pdf)
-  μ_T = first_cummulative_moment[end]
+  cumulative_zeroth_moment = cumsum(pdf)
+  cumulative_first_moment = cumsum(edges .* pdf)
+  μ_T = cumulative_first_moment[end]
   σ²_T = sum( ((first_bin:last_bin) .- μ_T).^2  .* pdf )
   maxval = zero(eltype(first(pdf)))
 
   # Equation (6) for determining the probability of the first class.
   function ω(k)
-    let zeroth_cummulative_moment = zeroth_cummulative_moment
-      return zeroth_cummulative_moment[k]
+    let cumulative_zeroth_moment = cumulative_zeroth_moment
+      return cumulative_zeroth_moment[k]
     end
   end
 
   # Equation (7) for determining the mean of the first class.
   function μ(k)
-   let first_cummulative_moment = first_cummulative_moment
-     return first_cummulative_moment[k]
+   let cumulative_first_moment = cumulative_first_moment
+     return cumulative_first_moment[k]
    end
   end
 
