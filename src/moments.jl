@@ -1,6 +1,6 @@
 """
 ```
-t = find_threshold(Moments(),  histogram, edges)
+t = find_threshold(Moments(), histogram, edges)
 ```
 
 The following rule determines the threshold:  if one assigns all observations
@@ -27,7 +27,7 @@ are divided.
 
 # Example
 
-Compute the threshold for the "camerman" image in the `TestImages` package.
+Compute the threshold for the "cameraman" image in the `TestImages` package.
 
 ```julia
 using TestImages, ImageContrastAdjustment, HistogramThresholding
@@ -40,7 +40,7 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(Moments(),counts[1:end], edges)
+t = find_threshold(Moments(), counts[1:end], edges)
 ```
 
 # Reference
@@ -62,7 +62,7 @@ end
 
 function determine_threshold(histogram, target_count)
     #= Finding the bin for which the bins below and including it contain p₀
-     pixels. =#
+      pixels. =#
     current_count = 0
     temp_bin = 0
     final_bin = 0
@@ -82,7 +82,7 @@ function compute_moments(histogram, edges, n)
     m₁ = 0.0
     m₂ = 0.0
     m₃ = 0.0
-    # (2) Compute the moments from a histogram.
+    # Compute the moments from the histogram. (eq 2)
     for j in eachindex(histogram)
         m₁ += (histogram[j] / n) * edges[j]
         m₂ += (histogram[j] / n) * (edges[j])^2
@@ -122,7 +122,7 @@ function compute_pixel_fractions(z₀, z₁, m₁)
 end
 
 function preserved_moments(p₀, z₀, p₁, z₁)
-    # (3) Preserving the moments of the resulting image.
+    # Moments of the resulting image should be identical (eq 3).
     m₁₀ = p₀ * (z₀)^0 + p₁ * (z₁)^0
     m₁₁ = p₀ * (z₀)^1 + p₁ * (z₁)^1
     m₁₂ = p₀ * (z₀)^2 + p₁ * (z₁)^2
