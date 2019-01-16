@@ -3,10 +3,10 @@
 t = find_threshold(UnimodalRosin(), histogram, edges)
 ```
 
-Generates a threshold value for array `histogram` and interval `edges`
-using Rosin's algorithm.
+Generates a threshold assuming a unimodal distribution using Rosin's algorithm.
 
 # Output
+
 Returns `t`, a real number that specifies the threshold.
 
 # Details
@@ -42,6 +42,7 @@ are divided.
 # Example
 
 Compute the threshold for the "moonsurface" image in the `TestImages` package.
+
 ```julia
 using TestImages, ImageContrastAdjustment, HistogramThresholding
 
@@ -53,19 +54,16 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(UnimodalRosin(),counts[1:end], edges)
+t = find_threshold(UnimodalRosin(), counts[1:end], edges)
 ```
-
 
 # Reference
 1. P. L. Rosin, “Unimodal thresholding,” Pattern Recognition, vol. 34, no. 11, pp. 2083–2096, Nov. 2001.[doi:10.1016/s0031-3203(00)00136-9](https://doi.org/10.1016/s0031-3203%2800%2900136-9)
-
-
-# See Also
 """
 function find_threshold(algorithm::UnimodalRosin, histogram::AbstractArray, edges::AbstractRange)
-    #= Calculates the orthogonal distance between the line (slope m,
-    y-intercept c), and the point (coordinates x₀, y₀).
+    #=
+      Calculates the orthogonal distance between the line (slope m,
+      y-intercept c), and the point (coordinates x₀, y₀).
     =#
     function calculate_distance(m::Real, c::Real, x₀::Real, y₀::Real)
         abs(m*x₀ + -1*y₀ + c) / sqrt((m)^2 + 1)
@@ -79,7 +77,7 @@ function find_threshold(algorithm::UnimodalRosin, histogram::AbstractArray, edge
     found_min = false
 
     # Find the first zero bin.
-    for j in max_index:last(first(axes(histogram)))
+    for j in max_index:lastindex(histogram)
         if histogram[j] == 0.0
             min_index = j
             found_min = true
@@ -89,7 +87,7 @@ function find_threshold(algorithm::UnimodalRosin, histogram::AbstractArray, edge
 
     # If no zero bin is found, use the last bin.
     if found_min == false
-        min_index = last(first(axes(histogram)))
+        min_index = lastindex(histogram)
     end
 
     # Find slope and y-intercept of the line.

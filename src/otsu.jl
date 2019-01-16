@@ -1,6 +1,6 @@
 """
 ```
-t = find_threshold(Otsu(),  histogram, edges)
+t = find_threshold(Otsu(), histogram, edges)
 ```
 
 Under the assumption that the histogram is bimodal the threshold is
@@ -25,7 +25,7 @@ are divided.
 
 # Example
 
-Compute the threshold for the "camerman" image in the `TestImages` package.
+Compute the threshold for the "cameraman" image in the `TestImages` package.
 
 ```julia
 using TestImages, ImageContrastAdjustment, HistogramThresholding
@@ -38,7 +38,7 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(Otsu(),counts[1:end], edges)
+t = find_threshold(Otsu(), counts[1:end], edges)
 ```
 
 # Reference
@@ -48,9 +48,8 @@ t = find_threshold(Otsu(),counts[1:end], edges)
 function find_threshold(algorithm::Otsu,  histogram::AbstractArray, edges::AbstractRange)
   N = sum(histogram)
   pdf = histogram / N
-  histogram_indices = first(axes(pdf))
-  first_bin = first(histogram_indices)
-  last_bin = last(histogram_indices)
+  first_bin = firstindex(pdf)
+  last_bin = lastindex(pdf)
   cumulative_zeroth_moment = cumsum(pdf)
   cumulative_first_moment = cumsum(edges .* pdf)
   μ_T = cumulative_first_moment[end]
