@@ -1,7 +1,7 @@
 
 """
 ```
-t = find_threshold(MinimumError(),  histogram, edges)
+t = find_threshold(MinimumError(), histogram, edges)
 ```
 
 Under the assumption that the histogram is a mixture of two Gaussian
@@ -27,7 +27,7 @@ are divided.
 
 # Example
 
-Compute the threshold for the "camerman" image in the `TestImages` package.
+Compute the threshold for the "cameraman" image in the `TestImages` package.
 
 ```julia
 using TestImages, ImageContrastAdjustment, HistogramThresholding
@@ -40,7 +40,7 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(MinimumError(),counts[1:end], edges)
+t = find_threshold(MinimumError(), counts[1:end], edges)
 ```
 
 # References
