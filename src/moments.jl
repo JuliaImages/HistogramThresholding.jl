@@ -1,12 +1,16 @@
 """
 ```
-t = find_threshold(Moments(),  histogram, edges)
+t = find_threshold(Moments(), histogram, edges)
 ```
 
-When run on a bilevel histogram, will find two grey values for the resulting
-image to consist of, the fraction of pixels that belong to each grey value, and
-set the threshold such that the correct number of pixels are below it for the
-previous statements to be true.
+The following rule determines the threshold:  if one assigns all observations
+below the threshold to a value z₀ and all observations above the threshold to a
+value z₁, then the first three moments of the original histogram must match the
+moments of this specially constructed bilevel histogram.
+
+# Output
+
+Returns a real number `t` that specifies the threshold.
 
 # Arguments
 
@@ -21,9 +25,27 @@ An `AbstractArray` storing the frequency distribution.
 An `AbstractRange` specifying how the intervals for the frequency distribution
 are divided.
 
-## Reference
+# Example
 
-[1] W.-H. Tsai, “Moment-preserving thresolding: A new approach,” Computer Vision, Graphics, and Image Processing, vol. 29, no. 3, pp. 377–393, Mar. 1985. [doi:10.1016/0734-189x(85)90133-1](https://doi.org/10.1016/0734-189x(85)90133-1)
+Compute the threshold for the "cameraman" image in the `TestImages` package.
+
+```julia
+using TestImages, ImageContrastAdjustment, HistogramThresholding
+
+img = testimage("cameraman")
+edges, counts = build_histogram(img,256)
+#=
+  The `counts` array stores at index 0 the frequencies that were below the
+  first bin edge. Since we are seeking a threshold over the interval
+  partitioned by `edges` we need to discard the first bin in `counts`
+  so that the dimensions of `edges` and `counts` match.
+=#
+t = find_threshold(Moments(), counts[1:end], edges)
+```
+
+# Reference
+
+[1] W.-H. Tsai, “Moment-preserving thresolding: A new approach,” Computer Vision, Graphics, and Image Processing, vol. 29, no. 3, pp. 377–393, Mar. 1985. [doi:10.1016/0734-189x(85)90133-1](https://doi.org/10.1016/0734-189x%2885%2990133-1)
 """
 function find_threshold(algorithm::Moments, histogram::AbstractArray, edges::AbstractRange)
     n = sum(histogram)
@@ -40,7 +62,7 @@ end
 
 function determine_threshold(histogram, target_count)
     #= Finding the bin for which the bins below and including it contain p₀
-     pixels. =#
+      pixels. =#
     current_count = 0
     temp_bin = 0
     final_bin = 0
@@ -60,7 +82,7 @@ function compute_moments(histogram, edges, n)
     m₁ = 0.0
     m₂ = 0.0
     m₃ = 0.0
-    # (2) compute the moments from a histogram
+    # Compute the moments from the histogram. (eq 2)
     for j in eachindex(histogram)
         m₁ += (histogram[j] / n) * edges[j]
         m₂ += (histogram[j] / n) * (edges[j])^2
@@ -70,7 +92,7 @@ function compute_moments(histogram, edges, n)
 end
 
 function compute_auxiliary_values(m₀, m₁, m₂, m₃)
-    # Appendix A.1.i calculates the auxiliary values c
+    # Appendix A.1.i calculates the auxiliary values c.
     cₐ = det([m₀ m₁;
               m₁ m₂])
     c₀ = (1/cₐ) * det([-m₂ m₁;
@@ -81,8 +103,8 @@ function compute_auxiliary_values(m₀, m₁, m₂, m₃)
 end
 
 function compute_gray_levels(c₀, c₁)
-    #= Appendix A.1.ii calculates grey values z which are the bi-level colours
-     the resulting image will show in =#
+    #= Appendix A.1.ii calculates grey values z which are the bi-level intensities
+     associated with the hypothetical "unblurred" image. =#
     z₀ = (1/2) * ( -c₁ - sqrt(c₁^2 - 4*c₀))
     z₁ = (1/2) * ( -c₁ + sqrt(c₁^2 - 4*c₀))
     z₀, z₁
@@ -99,10 +121,11 @@ function compute_pixel_fractions(z₀, z₁, m₁)
     p₀, p₁
 end
 
-function preserve_moments(p₀, z₀, p₁, z₁)
-    # (3) Preserving the moments of the resulting image.
+function preserved_moments(p₀, z₀, p₁, z₁)
+    # Moments of the resulting image should be identical (eq 3).
     m₁₀ = p₀ * (z₀)^0 + p₁ * (z₁)^0
     m₁₁ = p₀ * (z₀)^1 + p₁ * (z₁)^1
     m₁₂ = p₀ * (z₀)^2 + p₁ * (z₁)^2
     m₁₃ = p₀ * (z₀)^3 + p₁ * (z₁)^3
+    m₁₀, m₁₁, m₁₂, m₁₃
 end
