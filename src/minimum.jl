@@ -62,7 +62,7 @@ function find_threshold(algorithm::MinimumIntermodes, histogram::AbstractArray, 
     bimodal_histogram = smooth_histogram(histogram, maxiter)
     indices = find_maxima_indices(bimodal_histogram)
     if length(indices) != 2
-        warn("Failed to find two modes. Falling back to `UnimodalRosin` method.")
+        @warn "Failed to find two modes. Falling back to `UnimodalRosin` method."
         return find_threshold(UnimodalRosin(), bimodal_histogram, edges)
     else
         t = 0

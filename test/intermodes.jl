@@ -6,6 +6,11 @@
     t = find_threshold(Intermodes(), samples, edges)
     @test t == 128
 
+    edges = 0:255
+    samples = map(x->surge(x, A = 20 ,k=0.04),edges)
+    t = find_threshold(Intermodes(), samples, edges)
+    @test t == 112
+
     # Call function and determine threshold on cameraman image for which we know
     # what the correct threshold should be (based on an implementation in
     # another project).
