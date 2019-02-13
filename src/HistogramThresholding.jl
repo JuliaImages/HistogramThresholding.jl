@@ -10,6 +10,7 @@ struct MinimumIntermodes <: ThresholdAlgorithm end
 struct Intermodes <: ThresholdAlgorithm end
 struct UnimodalRosin <: ThresholdAlgorithm end
 struct Moments <: ThresholdAlgorithm end
+struct Balanced <: ThresholdAlgorithm end
 
 include("common.jl")
 include("otsu.jl")
@@ -18,6 +19,7 @@ include("unimodal.jl")
 include("moments.jl")
 include("minimum.jl")
 include("intermodes.jl")
+include("balancedthreshold.jl")
 
 export
   # main functions
@@ -27,5 +29,6 @@ export
   Moments,
   MinimumIntermodes,
   Intermodes,
-  MinimumError
+  MinimumError,
+  Balanced
 end # module

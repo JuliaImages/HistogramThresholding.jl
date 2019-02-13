@@ -16,4 +16,5 @@ end
     include("unimodal.jl")
     include("moments.jl")
     include("minimum_error.jl")
+    include("balancedthreshold.jl")
 end
