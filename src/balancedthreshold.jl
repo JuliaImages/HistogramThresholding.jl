@@ -88,7 +88,7 @@ function find_threshold(algorithm::Balanced, histogram::AbstractArray, edges::Ab
         end
     end
     if Iₘ == 1 || Iₘ == length(histogram)
-        @warn "Found single peak and failed to threshold. Falling back to `UnimodalRosin` method."
+        @warn "Failed to threshold. Falling back to `UnimodalRosin` method."
         return find_threshold(UnimodalRosin(), histogram, edges)
     else
         return edges[Iₘ]
