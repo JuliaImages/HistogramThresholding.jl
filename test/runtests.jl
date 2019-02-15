@@ -18,4 +18,5 @@ end
     include("minimum_error.jl")
     include("balancedthreshold.jl")
     include("yen.jl")
+    include("entropy_thresholding.jl")
 end
