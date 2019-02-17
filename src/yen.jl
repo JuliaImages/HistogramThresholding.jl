@@ -1,20 +1,49 @@
 @doc raw"""
 ```
-t = find_threshold(Balanced(), histogram, edges)
+t = find_threshold(Yen(), histogram, edges)
 ```
 
-Computes the threshold value using Yen's maximum corrilation criterion for
-bileval thresholding.
+Computes the threshold value using Yen's maximum correlation criterion for
+bilevel thresholding.
 
 # Output
 
-Returns a real number `t` that specifies the threshold.
+Returns a real number `t` in `edges` (an `AbstractRange`) which corresponds to
+the threshold bin in the histogram.
+
 
 # Details
 
-The algorithm computes the corilation between the two sides of the threshold and
-attempts to maximize the corilation. The corrilation is defined as ``C(X)=-\ln{
-\sum\limits_{i \ge 0} p_i^2}``.
+This algorithm uses the concept of *entropic correlation* of a gray level histogram to produce a threshold
+value.
+
+Let ``f_1, f_2, \ldots, f_I`` be the frequencies in the various bins of the
+histogram and ``I`` the number of bins. With ``N = \sum_{i=1}^{I}f_i``, let
+``p_i = \frac{f_i}{N}`` (``i = 1, \ldots, I``) denote the probability
+distribution of gray levels. From this distribution one derives two additional
+distributions. The first defined for discrete values ``1`` to ``s`` and the
+other, from ``s+1`` to ``I``. These distributions are
+
+```math
+A: \frac{p_1}{P_s}, \frac{p_2}{P_s}, \ldots, \frac{p_s}{P_s}
+\quad \text{and} \quad
+B: \frac{p_{s+1}}{1-P_s}, \ldots, \frac{p_n}{1-P_s}
+\quad \text{where} \quad
+P_s = \sum_{i=1}^{s}p_i.
+```
+The entropic correlations associated with each distribution are
+
+```math
+C(A) = -\ln \sum_{i=1}^{s} \left( \frac{p_i}{P_s} \right)^2 \quad \text{and} \quad C(B) = -\ln \sum_{i=s+1}^{I} \left( \frac{p_i}{1 - P_s} \right)^2.
+```
+
+Combining these two entropic correlation functions we have
+
+```math
+\psi(s) = -\ln \sum_{i=1}^{s} \left( \frac{p_i}{P_s} \right)^2 -\ln \sum_{i=s+1}^{I} \left( \frac{p_i}{1 - P_s} \right)^2.
+```
+Finding the discrete value ``s`` which maximises the function ``\psi(s)`` produces
+the sought-after threshold value (i.e. the bin which determines the threshold).
 
 # Arguments
 
@@ -57,27 +86,27 @@ function find_threshold(algorithm::Yen, histogram::AbstractArray, edges::Abstrac
     m = length(histogram)
     p = zeros(m)
 
-    # calulate probability
+    # Calulate probability.
     for i in eachindex(p)
-        p[i] = histogram[i]/total
+        p[i] = histogram[i] / total
     end
 
-    # setup sums
+    # Setup sums.
     Pₛ = 0
     Gₛ = 0
     G′ₛ = sum(p.^2)
-    max_TC = typemin(Float64)
+    maxval = typemin(Float64)
     t = 0
     for s in eachindex(p[1:m-1])
-        # update sums
+        # Update sums.
         Pₛ += p[s]
         Gₛ += p[s]^2
         G′ₛ -= p[s]^2
 
-        # calculate TC
+        # Calculate total correlation.
         TC = -log(Gₛ * G′ₛ) + 2 * log(Pₛ * (1 - Pₛ))
-        if TC > max_TC
-            max_TC = TC
+        if TC > maxval
+            maxval = TC
             t = s
         end
     end
