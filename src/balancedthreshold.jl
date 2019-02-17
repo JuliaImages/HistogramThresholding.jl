@@ -1,23 +1,50 @@
-"""
+@doc raw"""
 ```
 t = find_threshold(Balanced(), histogram, edges)
 ```
-
-Balanced histogram thresholding weighs a histogram and compares the overall weight
-of each side of the histogram. Each iteration weight is removed from the heavier
-side and the start/middle/end points are recalculated. The agorithm continues
-untill the start and end points have converged to meet the middle point.
+In balanced histogram thresholding, one interprets a  bin as a  physical weight
+with a mass equal to its occupancy count. The balanced histogram method involves
+iterating the following three steps: (1) choose the midpoint bin index as a
+"pivot",  (2) compute the combined weight to the left and right of the pivot bin
+and (3) remove the leftmost bin if the left side is the heaviest, and the
+rightmost bin otherwise. The algorithm stops when the left and right sides of
+the pivot consist of a single bin. The pivot bin then determines the
+sought-after threshold.
 
 # Output
 
 Returns a real number `t` that specifies the threshold.
 
 # Details
+Let ``f_n`` (``n = 1 \ldots N``) denote the number of observations in the ``n``th
+bin of the histogram. The balanced histogram method constructs a sequence
+of nested intervals
 
-If after the start and end points have converged the final position is at the
-initial start or end point then the histogram must have a single peak and has
-failed to find a threshold. In this case the algorithm will fall back to using
-the `UnimodalRosin` method to select a threshold.
+```math
+[1,N] \cap \mathbb{Z} \supset I_2 \supset I_3 \supset \ldots \supset I_{N-1},
+```
+where for `k = 2 \ldots N-1 ``
+```math
+I_k = \begin{cases}
+   I_{k-1} \setminus \{\min \left( I_{k-1} \right) \} &\text{if } \sum_{n = \min \left( I_{k-1} \right)}^{I_m}f_n \gt   \sum_{n =  I_m + 1}^{ \max \left( I_{k-1} \right)} f_n, \\
+   I_{k-1} \setminus \{\max \left( I_{k-1} \right) \} &\text{otherwise},
+\end{cases}
+```
+and ``I_m = \lfloor \frac{1}{2}\left(  \min \left( I_{k-1} \right) +  \max \left( I_{k-1} \right) \right) \rfloor ``.
+The final interval ``I_{N-1}`` consists of a single element which is the bin index
+corresponding to the sought-after threshold.
+
+If one interprets a bin as a physical weight with a mass equal to its occupancy
+count, then each step of the algorithm can be conceptualised as removing the
+leftmost or rightmost bin to "balance" the resulting histogram on a pivot. The
+pivot is defined to be the midpoint between the start and end points of the
+interval under consideration.
+
+If it turns out that the single element in ``I_{N-1}`` equals ``1`` or ``N`` then
+the original histogram must have a single peak and the algorithm has failed to
+find a suitable threshold. In this case the algorithm will fall back to using
+the `UnimodalRosin` method to select the threshold.
+
 
 # Arguments
 
