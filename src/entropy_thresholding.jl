@@ -7,7 +7,8 @@ the entropy of the histogram.
 
 # Output
 
-Returns the point in the `AbstractRange` which corresponds to the threshold bin in the histogram.
+Returns a real number `t` in `edges`. The `edges` parameter represents an
+`AbstractRange` which specifies the intervals associated with the histogram bins.
 
 # Details
 

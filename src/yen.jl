@@ -8,8 +8,8 @@ bilevel thresholding.
 
 # Output
 
-Returns a real number `t` in `edges` (an `AbstractRange`) which corresponds to
-the threshold bin in the histogram.
+Returns a real number `t` in `edges`. The `edges` parameter represents an
+`AbstractRange` which specifies the intervals associated with the histogram bins.
 
 
 # Details
@@ -79,7 +79,7 @@ t = find_threshold(Yen(), counts[1:end], edges)
 
 # Reference
 
-1. Yen JC, Chang FJ, Chang S (1995), "A New Criterion for Automatic Multilevel Thresholding", IEEE Trans. on Image Processing 4 (3): 370-378, [doi:10.1109/83.366472](https://doi.org/10.1109/83.366472)
+1. Yen JC, Chang FJ, Chang S (1995), “A New Criterion for Automatic Multilevel Thresholding”, IEEE Trans. on Image Processing 4 (3): 370-378, [doi:10.1109/83.366472](https://doi.org/10.1109/83.366472)
 """
 function find_threshold(algorithm::Yen, histogram::AbstractArray, edges::AbstractRange)
     total = sum(histogram)

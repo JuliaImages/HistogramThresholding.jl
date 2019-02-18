@@ -10,7 +10,8 @@ moments of this specially constructed bilevel histogram.
 
 # Output
 
-Returns a real number `t` that specifies the threshold.
+Returns a real number `t` in `edges`. The `edges` parameter represents an
+`AbstractRange` which specifies the intervals associated with the histogram bins.
 
 # Arguments
 
