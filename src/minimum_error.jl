@@ -1,5 +1,5 @@
 
-"""
+@doc raw"""
 ```
 t = find_threshold(MinimumError(), histogram, edges)
 ```
@@ -12,6 +12,38 @@ error rate is minimised.
 
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
+
+# Details
+
+Let ``f_i`` ``(i=1 \ldots I)`` denote the number of observations in the
+``i``th bin of the histogram. Then the probability that an observation
+belongs to the ``i``th bin is given by  ``p_i = \frac{f_i}{N}`` (``i = 1,
+\ldots, I``), where ``N = \sum_{i=1}^{I}f_i``.
+
+The minimum error thresholding method assumes that one find a threshold
+``T`` which partitions the data into two categories,  ``C_0`` and ``C_1``, such that
+the data can be modelled by a mixture of two Gaussian distribution. Let
+```math
+P_0(T) = \sum_{i = 1}^T p_i \quad \text{and} \quad P_1(T) = \sum_{i = T+1}^I p_i
+```
+denote the cumulative probabilities,
+```math
+\mu_0(T) = \sum_{i = 1}^T i \frac{p_i}{P_0(T)} \quad \text{and} \quad \mu_1(T) = \sum_{i = T+1}^I i \frac{p_i}{P_1(T)}
+```
+denote the means, and
+```math
+\sigma_0^2(T) = \sum_{i = 1}^T (i-\mu_0(T))^2 \frac{p_i}{P_0(T)} \quad \text{and} \quad \sigma_1^2(T) = \sum_{i = T+1}^I (i-\mu_1(T))^2 \frac{p_i}{P_1(T)}
+```
+denote the variances of categories ``C_0`` and ``C_1``, respectively.
+
+Kittler and Illingworth proposed to use the minimum error criterion function
+```math
+J(T) = 1 + 2 \left[ P_0(T) \ln \sigma_0(T) + P_1(T) \ln \sigma_1(T) \right] - 2 \left[P_0(T) \ln P_0(T) + P_1(T) \ln P_1(T) \right]
+```
+to assess the discreprancy between the mixture of Gaussians implied by a particular threshold ``T``,
+and the piecewise-constant probability density function represented by the histogram.
+The discrete value ``T`` which minimizes the function ``J(T)`` produces
+the sought-after threshold value (i.e. the bin which determines the threshold).
 
 # Arguments
 
