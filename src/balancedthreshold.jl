@@ -13,7 +13,8 @@ sought-after threshold.
 
 # Output
 
-Returns a real number `t` that specifies the threshold.
+Returns a real number `t` in `edges`. The `edges` parameter represents an
+`AbstractRange` which specifies the intervals associated with the histogram bins.
 
 # Details
 Let ``f_n`` (``n = 1 \ldots N``) denote the number of observations in the ``n``th
@@ -23,7 +24,7 @@ of nested intervals
 ```math
 [1,N] \cap \mathbb{Z} \supset I_2 \supset I_3 \supset \ldots \supset I_{N-1},
 ```
-where for `k = 2 \ldots N-1 ``
+where for ``k = 2 \ldots N-1``
 ```math
 I_k = \begin{cases}
    I_{k-1} \setminus \{\min \left( I_{k-1} \right) \} &\text{if } \sum_{n = \min \left( I_{k-1} \right)}^{I_m}f_n \gt   \sum_{n =  I_m + 1}^{ \max \left( I_{k-1} \right)} f_n, \\
@@ -80,7 +81,7 @@ t = find_threshold(Balanced(), counts[1:end], edges)
 
 # Reference
 
-1. "BI-LEVEL IMAGE THRESHOLDING - A Fast Method", Proceedings of the First International Conference on Bio-inspired Systems and Signal Processing, 2008. Available: [10.5220/0001064300700076](https://doi.org/10.5220/0001064300700076)
+1. “BI-LEVEL IMAGE THRESHOLDING - A Fast Method”, Proceedings of the First International Conference on Bio-inspired Systems and Signal Processing, 2008. Available: [10.5220/0001064300700076](https://doi.org/10.5220/0001064300700076)
 """
 function find_threshold(algorithm::Balanced, histogram::AbstractArray, edges::AbstractRange)
     # set initial start/middle/end points and weigths

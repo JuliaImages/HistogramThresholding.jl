@@ -9,7 +9,8 @@ to the minimum value between the two modes.
 
 # Output
 
-Returns `t`, a real number that specifies the threshold.
+Returns a real number `t` in `edges`. The `edges` parameter represents an
+`AbstractRange` which specifies the intervals associated with the histogram bins.
 
 # Details
 
