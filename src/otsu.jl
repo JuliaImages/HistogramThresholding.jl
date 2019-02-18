@@ -43,7 +43,7 @@ represent the overall mean,
 ```
 the between-category variance, and
 ```math
-\sigma_w^2(T) = P_0(T) \sigma_0^2(T) +  P_1(T)*\sigma_1^2(T)
+\sigma_w^2(T) = P_0(T) \sigma_0^2(T) +  P_1(T)\sigma_1^2(T)
 ```
 the within-category variance, respectively.
 

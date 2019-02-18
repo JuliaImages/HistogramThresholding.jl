@@ -7,8 +7,7 @@ the entropy of the histogram.
 
 # Output
 
-Returns a real number `t` in `edges`. The `edges` parameter represents an
-`AbstractRange` which specifies the intervals associated with the histogram bins.
+Returns the point in the `AbstractRange` which corresponds to the threshold bin in the histogram.
 
 # Details
 
@@ -17,7 +16,7 @@ value.
 
 Let ``f_1, f_2, \\ldots, f_I`` be the frequencies in the various bins of the
 histogram and ``I`` the number of bins. With ``N = \\sum_{i=1}^{I}f_i``, let
-``p_i = \\frac{f_i}{N}`` (``i = 1, 2, 3, \\ldots, I``) denote the probability
+``p_i = \\frac{f_i}{N}`` (``i = 1, \\ldots, I``) denote the probability
 distribution of gray levels. From this distribution one derives two additional
 distributions. The first defined for discrete values ``1`` to ``s`` and the
 other, from ``s+1`` to ``I``. These distributions are
@@ -48,7 +47,7 @@ H_n = -\\sum_{i=1}^{I}p_i\\ln{p_i}.
 Combining these two entropy functions we have
 
 ```math
-\\psi(s) = ln(P_s(1-P_s)) + \\frac{H_s}{P_s} + \\frac{H_n-H_s}{1-P_s}.
+\\psi(s) = \\ln(P_s(1-P_s)) + \\frac{H_s}{P_s} + \\frac{H_n-H_s}{1-P_s}.
 ```
 Finding the discrete value ``s`` which maximises the function ``\\psi(s)`` produces
 the sought-after threshold value (i.e. the bin which determines the threshold).
