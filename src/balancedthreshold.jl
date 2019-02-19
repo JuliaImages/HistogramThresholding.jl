@@ -7,9 +7,8 @@ with a mass equal to its occupancy count. The balanced histogram method involves
 iterating the following three steps: (1) choose the midpoint bin index as a
 "pivot",  (2) compute the combined weight to the left and right of the pivot bin
 and (3) remove the leftmost bin if the left side is the heaviest, and the
-rightmost bin otherwise. The algorithm stops when the left and right sides of
-the pivot consist of a single bin. The pivot bin then determines the
-sought-after threshold.
+rightmost bin otherwise. The algorithm stops when only a single bin remains.
+The last bin determines the sought-after threshold.
 
 # Output
 
@@ -33,7 +32,7 @@ I_k = \begin{cases}
 ```
 and ``I_m = \lfloor \frac{1}{2}\left(  \min \left( I_{k-1} \right) +  \max \left( I_{k-1} \right) \right) \rfloor ``.
 The final interval ``I_{N-1}`` consists of a single element which is the bin index
-corresponding to the sought-after threshold.
+corresponding to the desired threshold.
 
 If one interprets a bin as a physical weight with a mass equal to its occupancy
 count, then each step of the algorithm can be conceptualised as removing the
