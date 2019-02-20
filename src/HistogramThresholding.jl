@@ -12,7 +12,7 @@ struct UnimodalRosin <: ThresholdAlgorithm end
 struct Moments <: ThresholdAlgorithm end
 struct Balanced <: ThresholdAlgorithm end
 struct Yen <: ThresholdAlgorithm end
-struct EntropyThresholding <: ThresholdAlgorithm end
+struct Entropy <: ThresholdAlgorithm end
 
 
 include("common.jl")
@@ -38,5 +38,5 @@ export
   MinimumError,
   Balanced,
   Yen,
-  EntropyThresholding
+  Entropy
 end # module

@@ -20,7 +20,7 @@ Let ``f_i`` ``(i=1 \ldots I)`` denote the number of observations in the
 belongs to the ``i``th bin is given by  ``p_i = \frac{f_i}{N}`` (``i = 1,
 \ldots, I``), where ``N = \sum_{i=1}^{I}f_i``.
 
-The minimum error thresholding method assumes that one find a threshold
+The minimum error thresholding method assumes that one can find a threshold
 ``T`` which partitions the data into two categories,  ``C_0`` and ``C_1``, such that
 the data can be modelled by a mixture of two Gaussian distribution. Let
 ```math
