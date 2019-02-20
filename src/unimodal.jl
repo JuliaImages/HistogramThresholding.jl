@@ -24,8 +24,10 @@ This algorithm assumes that:
 
 * The histogram is unimodal.
 * There is always at least one bin that has a frequency of 0. If not, the algorithm will use the last bin as the minimum bin.
-* If the histogram includes multiple bins with a frequency of 0, the algorithm will select the first zero bin as its minimum.
-* If there are multiple bins with the greatest orthogonal distance, the leftmost bin is selected as the threshold.
+
+If the histogram includes multiple bins with a frequency of 0, the algorithm
+will select the first zero bin as its minimum. If there are multiple bins with
+the greatest orthogonal distance, the leftmost bin is selected as the threshold.
 
 # Arguments
 

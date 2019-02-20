@@ -1,6 +1,6 @@
 """
 ```
-find_threshold(EntropyThresholding(),counts,edges)
+find_threshold(Entropy(),counts,edges)
 ```
 An algorithm for finding the threshold value for a gray-level histogram using
 the entropy of the histogram.
@@ -87,7 +87,7 @@ find_threshold(EntropyThresholding(), counts[1:end], edges)
 # References
 [1] J. N. Kapur, P. K. Sahoo, and A. K. C. Wong, “A new method for gray-level picture thresholding using the entropy of the histogram,” *Computer Vision, Graphics, and Image Processing*, vol. 29, no. 1, p. 140, Jan. 1985.[doi:10.1016/s0734-189x(85)90156-2](https://doi.org/10.1016/s0734-189x%2885%2990156-2)
 """
-function find_threshold(algorithm::EntropyThresholding, counts::AbstractArray, edges::AbstractRange)
+function find_threshold(algorithm::Entropy, counts::AbstractArray, edges::AbstractRange)
     if length(edges) != length(counts)
         error("the lengths of edges and counts must match")
     end

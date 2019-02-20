@@ -11,7 +11,7 @@
     t = find_threshold(Yen(), samples, edges)
     @test t == 134
 
-    # Call function and determine threshold on lana image for which we know
+    # Call function and determine threshold on lena image for which we know
     # what the correct threshold should be (based on an implementation in
     # another project).
     img = testimage("lena_gray_512")
