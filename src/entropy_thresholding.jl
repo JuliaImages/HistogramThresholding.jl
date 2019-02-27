@@ -92,7 +92,7 @@ function find_threshold(algorithm::Entropy, counts::AbstractArray, edges::Abstra
         error("the lengths of edges and counts must match")
     end
     nbins = length(counts)
-    pdf = counts./sum(counts)
+    pdf = counts ./ sum(counts)
     Ψₘₐₓ = 0
     Hₛ = H(pdf)
     Hₙ = -1*Hₛ[nbins]
@@ -113,7 +113,7 @@ end
 function H(pdf::AbstractArray)
     h_dist = zeros(length(pdf))
     for i in 1:length(pdf)
-        h_dist[i] = pdf[i]*log(pdf[i])
+        h_dist[i] = (pdf[i] != 0) ? pdf[i]*log(pdf[i]) : 0.0
     end
     cumsum(h_dist)
 end
