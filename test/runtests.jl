@@ -1,4 +1,4 @@
-using HistogramThresholding, TestImages, Test, ImageCore, ColorTypes, ImageContrastAdjustment
+using HistogramThresholding, TestImages, Test, ColorTypes, ImageContrastAdjustment
 
 
 function gaussian_mixture(z;P₁,μ₁,σ₁,P₂,μ₂,σ₂)
