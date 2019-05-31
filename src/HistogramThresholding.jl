@@ -1,6 +1,6 @@
 module HistogramThresholding
 
-using Images
+
 using LinearAlgebra
 
 abstract type ThresholdAlgorithm end
