@@ -13,6 +13,6 @@
     img = testimage("cameraman")
     edges, counts = build_histogram(img,  256)
     t = find_threshold(Otsu(), counts[1:end], edges)
-    @test t == 0.33984375
+    @test t ≈ 0.33984375
 
 end
