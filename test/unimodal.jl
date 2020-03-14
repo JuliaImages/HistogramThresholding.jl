@@ -13,7 +13,7 @@
     img = testimage("moonsurface")
     edges, samples = build_histogram(img, 256)
     t = find_threshold(UnimodalRosin(),samples[1:end], edges)
-    @test t == 0.5530790786724538
+    @test t ≈ 0.5530790786724538
 
     #= Tests a histogram that resembles a unimodal image, using a
     surge function. Also tests the scenario in which there are no bins

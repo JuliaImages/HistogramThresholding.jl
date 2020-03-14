@@ -10,12 +10,12 @@
     img = testimage("moonsurface")
     edges, counts = build_histogram(img,  256)
     t = find_threshold(Balanced(), counts[1:end], edges)
-    @test t == 0.5530790786724538
+    @test t ≈ 0.5530790786724538
 
     # Call function and determine threshold on cameraman image
     img = testimage("cameraman")
     edges, counts = build_histogram(img,  256)
     t = find_threshold(Balanced(), counts[1:end], edges)
-    @test t == 0.16796875
+    @test t ≈ 0.16796875
 
 end

@@ -17,6 +17,6 @@
     img = testimage("cameraman")
     edges, counts = build_histogram(img,  256)
     t = find_threshold(Intermodes(), counts[1:end], edges)
-    @test t == 0.34765625
+    @test t ≈ 0.34765625
 
 end
