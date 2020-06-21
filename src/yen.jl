@@ -96,7 +96,7 @@ function find_threshold(algorithm::Yen, histogram::AbstractArray, edges::Abstrac
     Gₛ = 0
     G′ₛ = sum(p.^2)
     maxval = typemin(Float64)
-    t = 0
+    t = firstindex(edges)
     for s in eachindex(p[1:m-1])
         # Update sums.
         Pₛ += p[s]

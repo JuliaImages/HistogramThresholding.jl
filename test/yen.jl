@@ -19,4 +19,8 @@
     t = find_threshold(Yen(), counts[1:end], edges)
     @test round(t*256) == 120
 
+    img = zeros(Gray{Float64},10,10,3)
+    edges, counts = build_histogram(img,  256)
+    t = find_threshold(Yen(), counts[1:end], edges)
+    @test t == 0.0
 end
