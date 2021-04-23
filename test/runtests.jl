@@ -1,4 +1,5 @@
 using HistogramThresholding, TestImages, Test, ColorTypes, ImageContrastAdjustment
+using StaticArrays
 
 
 function gaussian_mixture(z;P₁,μ₁,σ₁,P₂,μ₂,σ₂)

@@ -87,7 +87,7 @@ find_threshold(EntropyThresholding(), counts[1:end], edges)
 # References
 [1] J. N. Kapur, P. K. Sahoo, and A. K. C. Wong, “A new method for gray-level picture thresholding using the entropy of the histogram,” *Computer Vision, Graphics, and Image Processing*, vol. 29, no. 1, p. 140, Jan. 1985.[doi:10.1016/s0734-189x(85)90156-2](https://doi.org/10.1016/s0734-189x%2885%2990156-2)
 """
-function find_threshold(algorithm::Entropy, counts::AbstractArray, edges::AbstractRange)
+function find_threshold(::Entropy, counts::AbstractArray, edges::AbstractRange)
     if length(edges) != length(counts)
         error("the lengths of edges and counts must match")
     end
@@ -97,8 +97,14 @@ function find_threshold(algorithm::Entropy, counts::AbstractArray, edges::Abstra
     Hₛ = H(pdf)
     Hₙ = -1*Hₛ[nbins]
     Pₛ = cumsum(pdf)
+    # Pₛ might exceed 1 for float-point numerical stability issue (issue #35)
+    Pₛ = _maybe_inplace_clamp01(Pₛ)
+
+    # Here we use a trivial findmax implementation so as to avoid additional memory allocation.
+    # Generally nbins are small number (e.g., 256) so fancy findmax strategy might give less
+    # performance boost.
     threshold_bin = 1
-    for i in 1:nbins
+    @inbounds for i in 1:nbins
         Pᵢ = Pₛ[i]
         Hᵢ = -1*Hₛ[i]
         Ψᵢ = log(Pᵢ*(1-Pᵢ)) + (Hᵢ/Pᵢ) + ((Hₙ-Hᵢ)/(1-Pᵢ))
@@ -110,10 +116,19 @@ function find_threshold(algorithm::Entropy, counts::AbstractArray, edges::Abstra
     edges[threshold_bin]
 end
 
-function H(pdf::AbstractArray)
-    h_dist = zeros(length(pdf))
-    for i in 1:length(pdf)
-        h_dist[i] = (pdf[i] != 0) ? pdf[i]*log(pdf[i]) : 0.0
+if VERSION > v"1.5"
+    function H(pdf::AbstractArray{T}) where T
+        f(x) = x == 0 ? zero(T) : convert(T, x*log(x)) # To avoid NaN when x == 0
+        cumsum(f(x) for x in pdf)
     end
-    cumsum(h_dist)
+else
+    function H(pdf::AbstractArray{T}) where T
+        f(x) = x == 0 ? zero(T) : convert(T, x*log(x)) # To avoid NaN when x == 0
+        cumsum(f.(pdf))
+    end
 end
+
+# We can't assure that all array types support setindex!, so here we only optimize
+# for the `Vector`, which is `counts[1:end]`. `SubArray` may or may not be writable.
+_maybe_inplace_clamp01(A::AbstractArray{T}) where T = clamp.(A, zero(T), one(T))
+_maybe_inplace_clamp01(A::Vector{T}) where T = clamp!(A, zero(T), one(T))
