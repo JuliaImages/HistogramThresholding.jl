@@ -1,11 +1,10 @@
 # HistogramThresholding.jl
 
-[![Build Status](https://travis-ci.com/zygmuntszpak/HistogramThresholding.jl.svg?branch=master)](https://travis-ci.com/zygmuntszpak/HistogramThresholding.jl)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/zygmuntszpak/HistogramThresholding.jl?svg=true)](https://ci.appveyor.com/project/zygmuntszpak/HistogramThresholding-jl)
-[![Codecov](https://codecov.io/gh/zygmuntszpak/HistogramThresholding.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/zygmuntszpak/HistogramThresholding.jl)
-
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://zygmuntszpak.github.io/HistogramThresholding.jl/stable)
-[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://zygmuntszpak.github.io/HistogramThresholding.jl/dev)
+[![][action-img]][action-url]
+[![][pkgeval-img]][pkgeval-url]
+[![][codecov-img]][codecov-url]
+[![][docs-stable-img]][docs-stable-url]
+[![][docs-dev-img]][docs-dev-url]
 
 A Julia package for analyzing a one-dimensional histogram and automatically choosing a threshold which partitions the histogram into two parts.  
 
@@ -38,3 +37,15 @@ t = find_threshold(UnimodalRosin(), counts[1:end], edges)
 # The threshold `t` can now be used to determine which intensities should be
 # set to 0 (black), and which intensities should be set to 1 (white). 
 ```
+
+
+[pkgeval-img]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/H/HistogramThresholding.svg
+[pkgeval-url]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html
+[action-img]: https://github.com/zygmuntszpak/HistogramThresholding.jl/workflows/CI/badge.svg
+[action-url]: https://github.com/zygmuntszpak/HistogramThresholding.jl/actions
+[codecov-img]: https://codecov.io/gh/zygmuntszpak/HistogramThresholding.jl/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/zygmuntszpak/HistogramThresholding.jl
+[docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
+[docs-stable-url]: https://zygmuntszpak.github.io/HistogramThresholding.jl/stable
+[docs-dev-img]: https://img.shields.io/badge/docs-dev-blue.svg
+[docs-dev-url]: https://zygmuntszpak.github.io/HistogramThresholding.jl/dev
