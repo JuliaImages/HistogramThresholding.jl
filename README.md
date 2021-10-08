@@ -41,8 +41,8 @@ t = find_threshold(UnimodalRosin(), counts[1:end], edges)
 
 [pkgeval-img]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/H/HistogramThresholding.svg
 [pkgeval-url]: https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html
-[action-img]: https://github.com/zygmuntszpak/HistogramThresholding.jl/workflows/CI/badge.svg
-[action-url]: https://github.com/zygmuntszpak/HistogramThresholding.jl/actions
+[action-img]: https://github.com/juliaimages/HistogramThresholding.jl/workflows/CI/badge.svg
+[action-url]: https://github.com/juliaimages/HistogramThresholding.jl/actions
 [codecov-img]: https://codecov.io/gh/juliaimages/HistogramThresholding.jl/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/juliaimages/HistogramThresholding.jl
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
