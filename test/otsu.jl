@@ -15,4 +15,8 @@
     t = find_threshold(Otsu(), counts[1:end], edges)
     @test t ≈ 0.33984375
 
+    # Same as above, but passing image directly.
+    t = find_threshold(img, Otsu(); nbins = 256)
+    @test t ≈ 0.33984375
+
 end

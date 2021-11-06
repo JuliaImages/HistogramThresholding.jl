@@ -1,0 +1,6 @@
+using Base: depwarn
+
+function find_threshold(algorithm::Otsu,  histogram::AbstractArray, edges::AbstractRange)
+    depwarn("find_threshold(alg, histogram, edges) is deprecated, use find_threshold(histogram, edges, alg) instead", :find_threshold)
+    return find_threshold(histogram, edges, algorithm)
+end

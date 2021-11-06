@@ -2,21 +2,25 @@ module HistogramThresholding
 
 
 using LinearAlgebra
+using ImageBase
 
-abstract type ThresholdAlgorithm end
-struct Otsu <: ThresholdAlgorithm end
-struct MinimumError <: ThresholdAlgorithm end
-struct MinimumIntermodes <: ThresholdAlgorithm end
-struct Intermodes <: ThresholdAlgorithm end
-struct UnimodalRosin <: ThresholdAlgorithm end
-struct Moments <: ThresholdAlgorithm end
-struct Balanced <: ThresholdAlgorithm end
-struct Yen <: ThresholdAlgorithm end
-struct Entropy <: ThresholdAlgorithm end
+# TODO: port ThresholdAPI to ImagesAPI
+include("ThresholdAPI/ThresholdAPI.jl")
+import .ThresholdAPI: AbstractThresholdAlgorithm,
+                      find_threshold, build_histogram
+
+struct MinimumError <: AbstractThresholdAlgorithm end
+struct MinimumIntermodes <: AbstractThresholdAlgorithm end
+struct Intermodes <: AbstractThresholdAlgorithm end
+struct UnimodalRosin <: AbstractThresholdAlgorithm end
+struct Moments <: AbstractThresholdAlgorithm end
+struct Balanced <: AbstractThresholdAlgorithm end
+struct Yen <: AbstractThresholdAlgorithm end
+struct Entropy <: AbstractThresholdAlgorithm end
 
 
 include("common.jl")
-include("otsu.jl")
+include("algorithms/otsu.jl")
 include("minimum_error.jl")
 include("unimodal.jl")
 include("moments.jl")
@@ -25,11 +29,13 @@ include("intermodes.jl")
 include("balancedthreshold.jl")
 include("yen.jl")
 include("entropy_thresholding.jl")
+include("deprecations.jl")
 
 
 export
   # main functions
   find_threshold,
+  build_histogram,
   Otsu,
   UnimodalRosin,
   Moments,
