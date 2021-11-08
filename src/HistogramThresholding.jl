@@ -15,19 +15,18 @@ struct Intermodes <: AbstractThresholdAlgorithm end
 struct UnimodalRosin <: AbstractThresholdAlgorithm end
 struct Moments <: AbstractThresholdAlgorithm end
 struct Balanced <: AbstractThresholdAlgorithm end
-struct Yen <: AbstractThresholdAlgorithm end
 struct Entropy <: AbstractThresholdAlgorithm end
 
 
 include("common.jl")
 include("algorithms/otsu.jl")
+include("algorithms/yen.jl")
 include("minimum_error.jl")
 include("unimodal.jl")
 include("moments.jl")
 include("minimum.jl")
 include("intermodes.jl")
 include("balancedthreshold.jl")
-include("yen.jl")
 include("entropy_thresholding.jl")
 include("deprecations.jl")
 
