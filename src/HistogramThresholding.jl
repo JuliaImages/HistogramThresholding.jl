@@ -10,8 +10,6 @@ import .ThresholdAPI: AbstractThresholdAlgorithm,
                       find_threshold, build_histogram
 
 struct UnimodalRosin <: AbstractThresholdAlgorithm end
-struct Entropy <: AbstractThresholdAlgorithm end
-
 
 include("common.jl")
 include("algorithms/otsu.jl")
@@ -22,7 +20,7 @@ include("algorithms/moments.jl")
 include("algorithms/minimum.jl")
 include("algorithms/intermodes.jl")
 include("algorithms/balancedthreshold.jl")
-include("entropy_thresholding.jl")
+include("algorithms/entropy_thresholding.jl")
 include("deprecations.jl")
 
 
