@@ -9,6 +9,7 @@ include("ThresholdAPI/ThresholdAPI.jl")
 import .ThresholdAPI: AbstractThresholdAlgorithm,
                       find_threshold, build_histogram
 
+
 struct UnimodalRosin <: AbstractThresholdAlgorithm end
 struct Entropy <: AbstractThresholdAlgorithm end
 
