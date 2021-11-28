@@ -9,10 +9,8 @@ include("ThresholdAPI/ThresholdAPI.jl")
 import .ThresholdAPI: AbstractThresholdAlgorithm,
                       find_threshold, build_histogram
 
-struct MinimumIntermodes <: AbstractThresholdAlgorithm end
-struct Intermodes <: AbstractThresholdAlgorithm end
+
 struct UnimodalRosin <: AbstractThresholdAlgorithm end
-struct Balanced <: AbstractThresholdAlgorithm end
 struct Entropy <: AbstractThresholdAlgorithm end
 
 
@@ -23,8 +21,8 @@ include("algorithms/minimum_error.jl")
 include("unimodal.jl")
 include("algorithms/moments.jl")
 include("algorithms/minimum.jl")
-include("intermodes.jl")
-include("balancedthreshold.jl")
+include("algorithms/intermodes.jl")
+include("algorithms/balancedthreshold.jl")
 include("entropy_thresholding.jl")
 include("deprecations.jl")
 

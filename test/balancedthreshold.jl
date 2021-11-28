@@ -18,4 +18,8 @@
     t = find_threshold(Balanced(), counts[1:end], edges)
     @test t ≈ 0.16796875
 
+    # Same as above, but passing image directly.
+    t = find_threshold(img, Balanced(); nbins = 256)
+    @test t ≈ 0.16796875
+
 end
