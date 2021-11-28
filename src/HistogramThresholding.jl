@@ -12,7 +12,6 @@ import .ThresholdAPI: AbstractThresholdAlgorithm,
 struct MinimumIntermodes <: AbstractThresholdAlgorithm end
 struct Intermodes <: AbstractThresholdAlgorithm end
 struct UnimodalRosin <: AbstractThresholdAlgorithm end
-struct Moments <: AbstractThresholdAlgorithm end
 struct Balanced <: AbstractThresholdAlgorithm end
 struct Entropy <: AbstractThresholdAlgorithm end
 
@@ -22,7 +21,7 @@ include("algorithms/otsu.jl")
 include("algorithms/yen.jl")
 include("algorithms/minimum_error.jl")
 include("unimodal.jl")
-include("moments.jl")
+include("algorithms/moments.jl")
 include("minimum.jl")
 include("intermodes.jl")
 include("balancedthreshold.jl")
