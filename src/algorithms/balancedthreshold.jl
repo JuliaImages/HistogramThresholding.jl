@@ -1,6 +1,7 @@
 @doc raw"""
 ```
 t = find_threshold(histogram, edges, Balanced())
+t = find_threshold(img, Balanced(); nbins = 256)
 ```
 In balanced histogram thresholding, one interprets a  bin as a  physical weight
 with a mass equal to its occupancy count. The balanced histogram method involves
@@ -120,7 +121,7 @@ function (::Balanced)(histogram::AbstractArray, edges::AbstractRange)
     end
     if Iₘ == 1 || Iₘ == length(histogram)
         @warn "Failed to threshold. Falling back to `UnimodalRosin` method."
-        return find_threshold(UnimodalRosin(), histogram, edges)
+        return find_threshold(histogram, edges, UnimodalRosin())
     else
         return edges[Iₘ]
     end

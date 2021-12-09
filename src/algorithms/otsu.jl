@@ -1,6 +1,7 @@
 @doc raw"""
 ```
 t = find_threshold(histogram, edges, Otsu())
+t = find_threshold(img, Otsu(); nbins = 256)
 ```
 
 Under the assumption that the histogram is bimodal the threshold is

@@ -1,6 +1,7 @@
 """
 ```
 find_threshold(counts, edges, Entropy())
+t = find_threshold(img, Entropy(); nbins = 256)
 ```
 An algorithm for finding the threshold value for a gray-level histogram using
 the entropy of the histogram.

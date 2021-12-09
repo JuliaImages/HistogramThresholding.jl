@@ -2,6 +2,7 @@
 @doc raw"""
 ```
 t = find_threshold(histogram, edges, MinimumError())
+t = find_threshold(img, MinimumError(); nbins = 256)
 ```
 
 Under the assumption that the histogram is a mixture of two Gaussian

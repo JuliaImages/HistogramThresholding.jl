@@ -1,6 +1,7 @@
 @doc raw"""
 ```
 t = find_threshold(histogram, edges, Moments())
+t = find_threshold(img, Moments(); nbins = 256)
 ```
 
 The following rule determines the threshold:  if one assigns all observations

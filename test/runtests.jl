@@ -1,4 +1,4 @@
-using HistogramThresholding, TestImages, ColorTypes
+using HistogramThresholding, TestImages, ColorTypes, ImageBase
 using StaticArrays
 using Test, Aqua, Documenter
 
@@ -28,4 +28,5 @@ end
     include("balancedthreshold.jl")
     include("yen.jl")
     include("entropy_thresholding.jl")
+    include("histogram_construction.jl")
 end

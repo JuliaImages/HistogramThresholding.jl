@@ -1,6 +1,7 @@
 """
 ```
 t = find_threshold(histogram, edges, Minimum(); maxiter = 8000)
+t = find_threshold(img, Minimum(); nbins = 256)
 ```
 
 Under the assumption that the histogram is bimodal the histogram is smoothed
@@ -74,7 +75,7 @@ function (algo::MinimumIntermodes)(histogram::AbstractArray, edges::AbstractRang
     indices = find_maxima_indices(bimodal_histogram)
     if length(indices) != 2
         @warn "Failed to find two modes. Falling back to `UnimodalRosin` method."
-        return find_threshold(UnimodalRosin(), bimodal_histogram, edges)
+        return find_threshold(bimodal_histogram, edges, UnimodalRosin())
     else
         t = 0
         min_value = typemax(Float64)

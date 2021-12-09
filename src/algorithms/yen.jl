@@ -1,6 +1,7 @@
 @doc raw"""
 ```
 t = find_threshold(histogram, edges, Yen())
+t = find_threshold(img, Yen(); nbins = 256)
 ```
 
 Computes the threshold value using Yen's maximum correlation criterion for

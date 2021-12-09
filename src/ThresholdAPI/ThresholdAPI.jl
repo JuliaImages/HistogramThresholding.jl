@@ -3,6 +3,7 @@
 module ThresholdAPI
 
 using ImageBase
+using MappedArrays
 
 """
     AbstractImageAlgorithm

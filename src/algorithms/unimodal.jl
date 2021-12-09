@@ -1,6 +1,7 @@
 """
 ```
-t = find_threshold(UnimodalRosin(), histogram, edges)
+t = find_threshold(histogram, edges, UnimodalRosin())
+t = find_threshold(img, UnimodalRosin(); nbins = 256)
 ```
 
 Generates a threshold assuming a unimodal distribution using Rosin's algorithm.
@@ -9,6 +10,8 @@ Generates a threshold assuming a unimodal distribution using Rosin's algorithm.
 
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
+
+# Extended help 
 
 # Details
 This algorithm first selects the bin in the histogram with the highest
@@ -57,13 +60,15 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(UnimodalRosin(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, UnimodalRosin())
 ```
 
 # Reference
 1. P. L. Rosin, “Unimodal thresholding,” Pattern Recognition, vol. 34, no. 11, pp. 2083–2096, Nov. 2001.[doi:10.1016/s0031-3203(00)00136-9](https://doi.org/10.1016/s0031-3203%2800%2900136-9)
 """
-function find_threshold(algorithm::UnimodalRosin, histogram::AbstractArray, edges::AbstractRange)
+struct UnimodalRosin <: AbstractThresholdAlgorithm end
+
+function (::UnimodalRosin)(histogram::AbstractArray, edges::AbstractRange)
     #=
       Calculates the orthogonal distance between the line (slope m,
       y-intercept c), and the point (coordinates x₀, y₀).

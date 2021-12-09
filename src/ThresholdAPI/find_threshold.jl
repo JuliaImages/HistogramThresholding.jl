@@ -46,7 +46,7 @@ function find_threshold(data::AbstractArray, f::AbstractThresholdAlgorithm ; nbi
         partitioned by `edges` we need to discard the first bin in `counts`
         so that the dimensions of `edges` and `counts` match.
     =#   
-    return f(counts[1:end], edges)
+    return f(view(counts, 1:lastindex(counts)), edges)
 end
 
 
