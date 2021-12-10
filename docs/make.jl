@@ -8,4 +8,4 @@ makedocs(modules  = [HistogramThresholding],
          sitename = "HistogramThresholding",
          pages    = ["index.md"])
 
-deploydocs(repo="github.com/zygmuntszpak/HistogramThresholding.jl.git")
+deploydocs(repo="github.com/JuliaImages/HistogramThresholding.jl.git")
