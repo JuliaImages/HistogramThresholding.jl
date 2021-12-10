@@ -12,9 +12,14 @@ A full list of algorithms can be found in the [documentation](https://juliaimage
 
 The general usage pattern is:
 ```julia
-t = find_threshold(algorithm::ThresholdAlgorithm, histogram::AbstractArray, edges::AbstractRange)
+t = find_threshold(histogram::AbstractArray, edges::AbstractRange, algorithm::AbstractThresholdAlgorithm)
 ```
-where `length(histogram)` must match `length(edges)`. 
+where `length(histogram)` must match `length(edges)`. You can use the `build_histogram` function to construct the histogram.
+
+Alternatively, you can supply an image and the histogram is built implicitly:
+```julia
+t = find_threshold(img, algorithm::AbstractThresholdAlgorithm)
+```
 
 ## Example
 Suppose one wants to binarize an image. Binarization requires choosing a grey level (a threshold `t`) such that all pixel intensities below that threshold are set to black and all intensities equal or above the threshold are set to white. One can attempt to choose a reasonable threshold automatically by analyzing the distribution of intensities in the image. 
@@ -22,7 +27,6 @@ Suppose one wants to binarize an image. Binarization requires choosing a grey le
 ```julia
 using HistogramThresholding
 using TestImages # For the moonsurface image.  
-using ImageContrastAdjustment # For the build_histogram() function.
 
 img = testimage("moonsurface")
 edges, counts = build_histogram(img,256)
@@ -32,7 +36,7 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(UnimodalRosin(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, UnimodalRosin())
 
 # The threshold `t` can now be used to determine which intensities should be
 # set to 0 (black), and which intensities should be set to 1 (white). 
