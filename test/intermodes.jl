@@ -19,4 +19,7 @@
     t = find_threshold(Intermodes(), counts[1:end], edges)
     @test t ≈ 0.34765625
 
+    # Same as above, but passing image directly.
+    t = find_threshold(img, Intermodes(); nbins = 256)
+    @test t ≈  0.34765625
 end

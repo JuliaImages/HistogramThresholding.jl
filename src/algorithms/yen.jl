@@ -1,6 +1,7 @@
 @doc raw"""
 ```
-t = find_threshold(Yen(), histogram, edges)
+t = find_threshold(histogram, edges, Yen())
+t = find_threshold(img, Yen(); nbins = 256)
 ```
 
 Computes the threshold value using Yen's maximum correlation criterion for
@@ -11,6 +12,7 @@ bilevel thresholding.
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
 
+# Extended help 
 
 # Details
 
@@ -74,14 +76,16 @@ edges, counts = build_histogram(img, 256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(Yen(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, Yen())
 ```
 
 # Reference
 
 1. Yen JC, Chang FJ, Chang S (1995), “A New Criterion for Automatic Multilevel Thresholding”, IEEE Trans. on Image Processing 4 (3): 370-378, [doi:10.1109/83.366472](https://doi.org/10.1109/83.366472)
 """
-function find_threshold(algorithm::Yen, histogram::AbstractArray, edges::AbstractRange)
+struct Yen <: AbstractThresholdAlgorithm end
+
+function (::Yen)(histogram::AbstractArray, edges::AbstractRange)
     total = sum(histogram)
     m = length(histogram)
     p = zeros(m)

@@ -1,6 +1,7 @@
 """
 ```
-find_threshold(Entropy(),counts,edges)
+find_threshold(counts, edges, Entropy())
+t = find_threshold(img, Entropy(); nbins = 256)
 ```
 An algorithm for finding the threshold value for a gray-level histogram using
 the entropy of the histogram.
@@ -8,6 +9,8 @@ the entropy of the histogram.
 # Output
 
 Returns the point in the `AbstractRange` which corresponds to the threshold bin in the histogram.
+
+# Extended help
 
 # Details
 
@@ -81,13 +84,15 @@ edges, counts = build_histogram(img, 256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-find_threshold(EntropyThresholding(), counts[1:end], edges)
+find_threshold(counts[1:end], edges, Entropy())
 ```
 
 # References
 [1] J. N. Kapur, P. K. Sahoo, and A. K. C. Wong, “A new method for gray-level picture thresholding using the entropy of the histogram,” *Computer Vision, Graphics, and Image Processing*, vol. 29, no. 1, p. 140, Jan. 1985.[doi:10.1016/s0734-189x(85)90156-2](https://doi.org/10.1016/s0734-189x%2885%2990156-2)
 """
-function find_threshold(::Entropy, counts::AbstractArray, edges::AbstractRange)
+struct Entropy <: AbstractThresholdAlgorithm end
+
+function (::Entropy)(counts::AbstractArray, edges::AbstractRange)
     if length(edges) != length(counts)
         error("the lengths of edges and counts must match")
     end

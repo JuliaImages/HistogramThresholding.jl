@@ -1,6 +1,7 @@
 """
 ```
-t = find_threshold(MinimumIntermodes(), histogram, edges; maxiter = 8000)
+t = find_threshold(histogram, edges, Minimum(); maxiter = 8000)
+t = find_threshold(img, Minimum(); nbins = 256)
 ```
 
 Under the assumption that the histogram is bimodal the histogram is smoothed
@@ -11,6 +12,8 @@ to the minimum value between the two modes.
 
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
+
+# Extended help
 
 # Details
 
@@ -51,7 +54,7 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(MinimumIntermodes(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, MinimumIntermodes())
 ```
 
 # Reference
@@ -59,12 +62,20 @@ t = find_threshold(MinimumIntermodes(), counts[1:end], edges)
 1. C. A. Glasbey, “An Analysis of Histogram-Based Thresholding Algorithms,” *CVGIP: Graphical Models and Image Processing*, vol. 55, no. 6, pp. 532–537, Nov. 1993. [doi:10.1006/cgip.1993.1040](https://doi.org/10.1006/cgip.1993.1040)
 2. J. M. S. Prewitt and M. L. Mendelsohn, “THE ANALYSIS OF CELL IMAGES*,” *Annals of the New York Academy of Sciences*, vol. 128, no. 3, pp. 1035–1053, Dec. 2006. [doi:10.1111/j.1749-6632.1965.tb11715.x](https://doi.org/10.1111/j.1749-6632.1965.tb11715.x)
 """
-function find_threshold(algorithm::MinimumIntermodes, histogram::AbstractArray, edges::AbstractRange; maxiter::Int = 8000)
+struct MinimumIntermodes <: AbstractThresholdAlgorithm
+    maxiter::Int
+    function MinimumIntermodes(; maxiter::Int = 8000)
+        new(maxiter)
+    end
+end
+
+function (algo::MinimumIntermodes)(histogram::AbstractArray, edges::AbstractRange)
+    maxiter = algo.maxiter
     bimodal_histogram = smooth_histogram(histogram, maxiter)
     indices = find_maxima_indices(bimodal_histogram)
     if length(indices) != 2
         @warn "Failed to find two modes. Falling back to `UnimodalRosin` method."
-        return find_threshold(UnimodalRosin(), bimodal_histogram, edges)
+        return find_threshold(bimodal_histogram, edges, UnimodalRosin())
     else
         t = 0
         min_value = typemax(Float64)

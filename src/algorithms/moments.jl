@@ -1,6 +1,7 @@
 @doc raw"""
 ```
-t = find_threshold(Moments(), histogram, edges)
+t = find_threshold(histogram, edges, Moments())
+t = find_threshold(img, Moments(); nbins = 256)
 ```
 
 The following rule determines the threshold:  if one assigns all observations
@@ -12,6 +13,8 @@ moments of this specially constructed bilevel histogram.
 
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
+
+# Extended help
 
 # Details
 
@@ -79,14 +82,16 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(Moments(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, Moments())
 ```
 
 # Reference
 
 [1] W.-H. Tsai, “Moment-preserving thresolding: A new approach,” Computer Vision, Graphics, and Image Processing, vol. 29, no. 3, pp. 377–393, Mar. 1985. [doi:10.1016/0734-189x(85)90133-1](https://doi.org/10.1016/0734-189x%2885%2990133-1)
 """
-function find_threshold(algorithm::Moments, histogram::AbstractArray, edges::AbstractRange)
+struct Moments <: AbstractThresholdAlgorithm end
+
+function (::Moments)(histogram::AbstractArray, edges::AbstractRange)
     n = sum(histogram)
     m₀ = 1.0
     m₁, m₂, m₃ =  compute_moments(histogram, edges, n)

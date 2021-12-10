@@ -1,7 +1,8 @@
 
 @doc raw"""
 ```
-t = find_threshold(MinimumError(), histogram, edges)
+t = find_threshold(histogram, edges, MinimumError())
+t = find_threshold(img, MinimumError(); nbins = 256)
 ```
 
 Under the assumption that the histogram is a mixture of two Gaussian
@@ -12,6 +13,8 @@ error rate is minimised.
 
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
+
+# Extended help 
 
 # Details
 
@@ -73,7 +76,7 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(MinimumError(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, MinimumError())
 ```
 
 # References
@@ -81,7 +84,9 @@ t = find_threshold(MinimumError(), counts[1:end], edges)
 1. J. Kittler and J. Illingworth, “Minimum error thresholding,” Pattern Recognition, vol. 19, no. 1, pp. 41–47, Jan. 1986. [doi:10.1016/0031-3203(86)90030-0](https://doi.org/10.1016/0031-3203%2886%2990030-0)
 2. Q.-Z. Ye and P.-E. Danielsson, “On minimum error thresholding and its implementations,” Pattern Recognition Letters, vol. 7, no. 4, pp. 201–206, Apr. 1988. [doi:10.1016/0167-8655(88)90103-1](https://doi.org/10.1016/0167-8655%2888%2990103-1)
 """
-function find_threshold(algorithm::MinimumError, histogram::AbstractArray, edges::AbstractRange)
+struct MinimumError <: AbstractThresholdAlgorithm end
+
+function (::MinimumError)(histogram::AbstractArray, edges::AbstractRange)
     frequencies = cumsum(histogram)
     X = cumsum(edges .* histogram)
     X² = cumsum(edges.^2 .* histogram)
@@ -108,8 +113,8 @@ end
   take the cumulative sums. Hence, we explicitlty convert the histogram to
   Float.
 =#
-function find_threshold(algorithm::MinimumError, histogram::AbstractArray{T}, edges::AbstractRange) where T <: Int
-    find_threshold(algorithm, convert.(Float64, histogram), edges)
+function (minimum_error::MinimumError)(histogram::AbstractArray{T}, edges::AbstractRange) where T <: Int
+    minimum_error(convert.(Float64, histogram), edges)
 end
 
 function compute_expectations(frequencies, X, X²)

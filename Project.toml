@@ -1,23 +1,25 @@
 name = "HistogramThresholding"
 uuid = "2c695a8d-9458-5d45-9878-1b8a99cf7853"
-authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>"]
-version = "0.2.5"
+authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>", "JuliaImages"]
+version = "0.3.0"
 
 [deps]
+ImageBase = "c817782e-172a-44cc-b673-b171935fbb9e"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+MappedArrays = "dbb5928d-eab1-5f90-85c2-b9b0edb7c900"
 
 [compat]
+ImageBase = "0.1.5"
+MappedArrays = "0.4"
 julia = "1"
 
 [extras]
-Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 ColorTypes = "3da002f7-5984-5a60-b8a6-cbb66c0b333f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-ImageContrastAdjustment = "f332f351-ec65-5f6a-b3d1-319c6670881a"
 ImageMagick = "6218d12a-5da1-5696-b52f-db25d2ecc6d1"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TestImages = "5e47fb64-e119-507b-a336-dd2b206d9990"
 
 [targets]
-test = ["Aqua", "ColorTypes", "Documenter", "ImageContrastAdjustment", "TestImages", "StaticArrays", "Test", "ImageMagick"]
+test = ["ColorTypes", "Documenter", "TestImages", "StaticArrays", "Test", "ImageMagick"]

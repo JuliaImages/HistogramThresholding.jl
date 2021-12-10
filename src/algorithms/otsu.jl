@@ -1,6 +1,7 @@
 @doc raw"""
 ```
-t = find_threshold(Otsu(), histogram, edges)
+t = find_threshold(histogram, edges, Otsu())
+t = find_threshold(img, Otsu(); nbins = 256)
 ```
 
 Under the assumption that the histogram is bimodal the threshold is
@@ -11,6 +12,7 @@ set so that the resultant between-class variance is maximal.
 Returns a real number `t` in `edges`. The `edges` parameter represents an
 `AbstractRange` which specifies the intervals associated with the histogram bins.
 
+# Extended help 
 
 # Details
 
@@ -82,52 +84,53 @@ edges, counts = build_histogram(img,256)
   partitioned by `edges` we need to discard the first bin in `counts`
   so that the dimensions of `edges` and `counts` match.
 =#
-t = find_threshold(Otsu(), counts[1:end], edges)
+t = find_threshold(counts[1:end], edges, Otsu())
 ```
 
 # Reference
 
 1. Nobuyuki Otsu (1979). “A threshold selection method from gray-level histograms”. *IEEE Trans. Sys., Man., Cyber.* 9 (1): 62–66. [doi:10.1109/TSMC.1979.4310076](http://dx.doi.org/doi:10.1109/TSMC.1979.4310076)
 """
-function find_threshold(algorithm::Otsu,  histogram::AbstractArray, edges::AbstractRange)
-  N = sum(histogram)
-  pdf = histogram / N
-  first_bin = firstindex(pdf)
-  last_bin = lastindex(pdf)
-  cumulative_zeroth_moment = cumsum(pdf)
-  cumulative_first_moment = cumsum(edges .* pdf)
-  μ_T = cumulative_first_moment[end]
-  σ²_T = sum( ((first_bin:last_bin) .- μ_T).^2  .* pdf )
-  maxval = zero(eltype(first(pdf)))
+struct Otsu <: AbstractThresholdAlgorithm end
 
-  # Equation (6) for determining the probability of the first class.
-  function ω(k)
-    let cumulative_zeroth_moment = cumulative_zeroth_moment
-      return cumulative_zeroth_moment[k]
+function (::Otsu)(histogram::AbstractArray, edges::AbstractRange)
+    N = sum(histogram)
+    pdf = histogram / N
+    first_bin = firstindex(pdf)
+    last_bin = lastindex(pdf)
+    cumulative_zeroth_moment = cumsum(pdf)
+    cumulative_first_moment = cumsum(edges .* pdf)
+    μ_T = cumulative_first_moment[end]
+    maxval = zero(eltype(first(pdf)))
+
+    # Equation (6) for determining the probability of the first class.
+    function ω(k)
+        let cumulative_zeroth_moment = cumulative_zeroth_moment
+            return cumulative_zeroth_moment[k]
+        end
     end
-  end
 
-  # Equation (7) for determining the mean of the first class.
-  function μ(k)
-   let cumulative_first_moment = cumulative_first_moment
-     return cumulative_first_moment[k]
-   end
-  end
-
-  # Equation (18) for determining the between-cass variance.
-  function σ²(k)
-    let μ_T = μ_T
-      return (μ_T*ω(k) - μ(k))^2 / (ω(k) * (1-ω(k)))
+    # Equation (7) for determining the mean of the first class.
+    function μ(k)
+        let cumulative_first_moment = cumulative_first_moment
+            return cumulative_first_moment[k]
+        end
     end
-  end
 
-  t = first_bin
-  for k = first_bin:last_bin - 1
-    val = σ²(k)
-    if val  > maxval
-       maxval = val
-       t = k
+    # Equation (18) for determining the between-cass variance.
+    function σ²(k)
+        let μ_T = μ_T
+            return (μ_T*ω(k) - μ(k))^2 / (ω(k) * (1-ω(k)))
+        end
     end
-  end
-  return edges[t]
+
+    t = first_bin
+    for k = first_bin:last_bin - 1
+        val = σ²(k)
+        if val  > maxval
+            maxval = val
+            t = k
+        end
+    end
+    return edges[t]
 end

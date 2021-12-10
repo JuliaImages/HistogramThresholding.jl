@@ -1,14 +1,6 @@
-using HistogramThresholding, TestImages, ColorTypes, ImageContrastAdjustment
+using HistogramThresholding, TestImages, ColorTypes, ImageBase
 using StaticArrays
-using Test, Aqua, Documenter
-
-@testset "Project meta quality checks" begin
-    # Not checking compat section for test-only dependencies
-    Aqua.test_all(HistogramThresholding; project_extras=true, deps_compat=true, stale_deps=true, project_toml_formatting=true)
-    
-    DocMeta.setdocmeta!(HistogramThresholding, :DocTestSetup, :(using HistogramThresholding); recursive=true)
-    doctest(HistogramThresholding, manual = false)
-end
+using Test, Documenter
 
 function gaussian_mixture(z;P₁,μ₁,σ₁,P₂,μ₂,σ₂)
     (P₁ / (σ₁*√(2*π))) * exp( -(z-μ₁)^2 / (2*σ₁^2) )  +  (P₂ / (σ₂*√(2*π))) * exp( -(z-μ₂)^2 / (2*σ₂^2) )
@@ -28,4 +20,5 @@ end
     include("balancedthreshold.jl")
     include("yen.jl")
     include("entropy_thresholding.jl")
+    include("histogram_construction.jl")
 end
