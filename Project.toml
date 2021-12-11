@@ -1,7 +1,7 @@
 name = "HistogramThresholding"
 uuid = "2c695a8d-9458-5d45-9878-1b8a99cf7853"
 authors = ["Dr. Zygmunt L. Szpak <zygmunt.szpak@gmail.com>", "JuliaImages"]
-version = "0.3.0"
+version = "0.3.1"
 
 [deps]
 ImageBase = "c817782e-172a-44cc-b673-b171935fbb9e"
